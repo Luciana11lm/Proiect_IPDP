@@ -3,4 +3,4 @@
 
 Diagrama de activitate
 
-![Activity_diagram drawio](https://github.com/Luciana11lm/Proiect_IPDP/assets/161320827/ac724ead-95cb-401b-b934-08f115451a81)
+![Activity_diagram drawio](https://github.com/Luciana11lm/Proiect_IPDP/assets/161320827/0a5e9fec-d102-42fc-b1c9-1d10a63e241c)
