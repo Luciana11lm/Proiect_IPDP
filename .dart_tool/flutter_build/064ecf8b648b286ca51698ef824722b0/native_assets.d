@@ -1,0 +1,1 @@
+ /Users/luciana/menu_app/menu_app/.dart_tool/flutter_build/064ecf8b648b286ca51698ef824722b0/native_assets.yaml: 
