@@ -25,7 +25,12 @@ class HomeSceen extends StatelessWidget {
           ],
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.cart)),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              CupertinoIcons.cart,
+            ),
+          ),
           IconButton(
               onPressed: () {
                 context.read<SignInBloc>().add(SignOutRequired());
@@ -49,8 +54,9 @@ class HomeSceen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.grey.shade300,
-                            offset: const Offset(3, 3))
+                          color: Colors.grey.shade300,
+                          offset: const Offset(3, 3),
+                        )
                       ]),
                   child: Column(
                     children: [

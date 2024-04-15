@@ -9,5 +9,5 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   Bloc.observer = SimpleBlocObserver();
-  runApp(MyApp(FirebaseUserRepo()));
+  runApp(const MyApp());
 }
