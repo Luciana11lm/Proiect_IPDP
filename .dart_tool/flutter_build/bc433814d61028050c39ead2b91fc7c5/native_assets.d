@@ -1,0 +1,1 @@
+ /Users/luciana/menu_app/menu_application/Proiect_IPDP/.dart_tool/flutter_build/bc433814d61028050c39ead2b91fc7c5/native_assets.yaml: 
