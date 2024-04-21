@@ -18,3 +18,5 @@ class SignInRequired extends SignInEvent {
 }
 
 class SignOutRequired extends SignInEvent {}
+
+class SignOutSuccess extends SignInState {}

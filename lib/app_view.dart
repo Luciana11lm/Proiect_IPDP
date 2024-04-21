@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:menu_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:menu_app/screens/auth/views/welcome_screen.dart';
 import 'package:menu_app/screens/home/views/home_screen.dart';
-
+import 'package:menu_app/themes/theme_provider.dart';
+import "package:provider/provider.dart";
 import 'screens/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
 
 class MyAppView extends StatelessWidget {
@@ -14,12 +15,7 @@ class MyAppView extends StatelessWidget {
     return MaterialApp(
         title: 'Menu',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            colorScheme: const ColorScheme.light(
-                background: Color(0xFFE9EDE4),
-                onBackground: Colors.black,
-                primary: Colors.blue,
-                onPrimary: Colors.white)),
+        theme: Provider.of<ThemeProvider>(context).themeData,
         home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
             if (state.status == AuthenticationStatus.authenticated) {
