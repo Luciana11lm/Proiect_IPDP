@@ -22,7 +22,7 @@ class MyAppView extends StatelessWidget {
               return BlocProvider(
                 create: (context) => SignInBloc(
                     context.read<AuthenticationBloc>().userRepository),
-                child: const HomeSceen(),
+                child: const HomeScreen(),
               );
             } else {
               return const WelcomeScreen();
