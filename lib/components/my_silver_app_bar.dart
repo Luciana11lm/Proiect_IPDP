@@ -8,7 +8,7 @@ class MySilverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: 340,
+      //expandedHeight: 340,
       collapsedHeight: 120,
       floating: false,
       pinned: true,
@@ -26,6 +26,7 @@ class MySilverAppBar extends StatelessWidget {
         title: title,
         centerTitle: true,
         titlePadding: const EdgeInsets.only(left: 0, right: 0, top: 0),
+        expandedTitleScale: 1,
       ),
     );
   }

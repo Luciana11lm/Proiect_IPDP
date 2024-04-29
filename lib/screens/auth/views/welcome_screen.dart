@@ -66,7 +66,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 50.0),
                         child: TabBar(
-                          indicatorColor: Colors.red,
                           controller: tabController,
                           unselectedLabelColor: Theme.of(context)
                               .colorScheme

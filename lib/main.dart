@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:menu_app/app.dart';
+import 'package:menu_app/models/restaurant.dart';
 import 'package:menu_app/simple_bloc_observer.dart';
 import 'package:menu_app/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   Bloc.observer = SimpleBlocObserver();
-  runApp(ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      child: MyApp((FirebaseUserRepo()))));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => ThemeProvider()),
+    ChangeNotifierProvider(create: (context) => Restaurant()),
+  ], child: MyApp(FirebaseUserRepo())));
 }
