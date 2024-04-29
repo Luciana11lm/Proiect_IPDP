@@ -52,108 +52,140 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   constraints: const BoxConstraints(),
                   child: Column(
                     children: [
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 100),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.9,
-                        child: MyTextField(
-                            controller: emailController,
-                            hintText: 'Email',
-                            obscureText: false,
-                            keyboardType: TextInputType.emailAddress,
-                            prefixIcon: const Icon(CupertinoIcons.mail_solid),
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please fill in this field';
-                              } else if (!RegExp(
-                                      r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
-                                  .hasMatch(val)) {
-                                return 'Please enter a valid email';
-                              }
-                              return null;
-                            }),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xfffb8500),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.3),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: MyTextField(
+                                controller: emailController,
+                                hintText: 'Email',
+                                obscureText: false,
+                                keyboardType: TextInputType.emailAddress,
+                                prefixIcon:
+                                    const Icon(CupertinoIcons.mail_solid),
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'Please fill in this field';
+                                  } else if (!RegExp(
+                                          r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
+                                      .hasMatch(val)) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                }),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.9,
-                        child: MyTextField(
-                            controller: passwordController,
-                            hintText: 'Password',
-                            obscureText: obscurePassword,
-                            keyboardType: TextInputType.visiblePassword,
-                            prefixIcon: const Icon(CupertinoIcons.lock_fill),
-                            onChanged: (val) {
-                              if (val!.contains(RegExp(r'[A-Z]'))) {
-                                setState(() {
-                                  containsUpperCase = true;
-                                });
-                              } else {
-                                setState(() {
-                                  containsUpperCase = false;
-                                });
-                              }
-                              if (val.contains(RegExp(r'[a-z]'))) {
-                                setState(() {
-                                  containsLowerCase = true;
-                                });
-                              } else {
-                                setState(() {
-                                  containsLowerCase = false;
-                                });
-                              }
-                              if (val.contains(RegExp(r'[0-9]'))) {
-                                setState(() {
-                                  containsNumber = true;
-                                });
-                              } else {
-                                setState(() {
-                                  containsNumber = false;
-                                });
-                              }
-                              if (val.contains(RegExp(
-                                  r'^(?=.*?[!@#$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^])'))) {
-                                setState(() {
-                                  containsSpecialChar = true;
-                                });
-                              } else {
-                                setState(() {
-                                  containsSpecialChar = false;
-                                });
-                              }
-                              if (val.length >= 8) {
-                                setState(() {
-                                  contains8Length = true;
-                                });
-                              } else {
-                                setState(() {
-                                  contains8Length = false;
-                                });
-                              }
-                              return null;
-                            },
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  obscurePassword = !obscurePassword;
-                                  if (obscurePassword) {
-                                    iconPassword = CupertinoIcons.eye_fill;
-                                  } else {
-                                    iconPassword =
-                                        CupertinoIcons.eye_slash_fill;
-                                  }
-                                });
-                              },
-                              icon: Icon(iconPassword),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xfffb8500),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.3),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
                             ),
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please fill in this field';
-                              } else if (!RegExp(
-                                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
-                                  .hasMatch(val)) {
-                                return 'Please enter a valid password';
-                              }
-                              return null;
-                            }),
+                            child: MyTextField(
+                                controller: passwordController,
+                                hintText: 'Password',
+                                obscureText: obscurePassword,
+                                keyboardType: TextInputType.visiblePassword,
+                                prefixIcon:
+                                    const Icon(CupertinoIcons.lock_fill),
+                                onChanged: (val) {
+                                  if (val!.contains(RegExp(r'[A-Z]'))) {
+                                    setState(() {
+                                      containsUpperCase = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      containsUpperCase = false;
+                                    });
+                                  }
+                                  if (val.contains(RegExp(r'[a-z]'))) {
+                                    setState(() {
+                                      containsLowerCase = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      containsLowerCase = false;
+                                    });
+                                  }
+                                  if (val.contains(RegExp(r'[0-9]'))) {
+                                    setState(() {
+                                      containsNumber = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      containsNumber = false;
+                                    });
+                                  }
+                                  if (val.contains(RegExp(
+                                      r'^(?=.*?[!@#$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^])'))) {
+                                    setState(() {
+                                      containsSpecialChar = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      containsSpecialChar = false;
+                                    });
+                                  }
+                                  if (val.length >= 8) {
+                                    setState(() {
+                                      contains8Length = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      contains8Length = false;
+                                    });
+                                  }
+                                  return null;
+                                },
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      obscurePassword = !obscurePassword;
+                                      if (obscurePassword) {
+                                        iconPassword = CupertinoIcons.eye_fill;
+                                      } else {
+                                        iconPassword =
+                                            CupertinoIcons.eye_slash_fill;
+                                      }
+                                    });
+                                  },
+                                  icon: Icon(iconPassword),
+                                ),
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'Please fill in this field';
+                                  } else if (!RegExp(
+                                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
+                                      .hasMatch(val)) {
+                                    return 'Please enter a valid password';
+                                  }
+                                  return null;
+                                }),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -220,20 +252,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(height: 10),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.9,
-                        child: MyTextField(
-                            controller: nameController,
-                            hintText: 'Name',
-                            obscureText: false,
-                            keyboardType: TextInputType.name,
-                            prefixIcon: const Icon(CupertinoIcons.person_fill),
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please fill in this field';
-                              } else if (val.length > 30) {
-                                return 'Name too long';
-                              }
-                              return null;
-                            }),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xfffb8500),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.3),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: MyTextField(
+                                controller: nameController,
+                                hintText: 'Name',
+                                obscureText: false,
+                                keyboardType: TextInputType.name,
+                                prefixIcon:
+                                    const Icon(CupertinoIcons.person_fill),
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'Please fill in this field';
+                                  } else if (val.length > 30) {
+                                    return 'Name too long';
+                                  }
+                                  return null;
+                                }),
+                          ),
+                        ),
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.02),
@@ -256,8 +304,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   },
                                   style: TextButton.styleFrom(
                                       elevation: 3.0,
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
+                                      backgroundColor: const Color(0xfffb8500),
                                       foregroundColor: Colors.white,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
