@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:menu_app/app.dart';
@@ -33,13 +32,16 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (_currentPageIndex < 2) {
-        _controller.nextPage(
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeInOut);
-      }
-    });
+    _timer = Timer.periodic(
+      const Duration(seconds: 5),
+      (timer) {
+        if (_currentPageIndex < 2) {
+          _controller.nextPage(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut);
+        }
+      },
+    );
   }
 
   @override
