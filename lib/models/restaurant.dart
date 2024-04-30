@@ -8,7 +8,7 @@ class Restaurant extends ChangeNotifier {
       name: "Cheeseburger",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.burgers,
       availableAddons: [
@@ -20,7 +20,7 @@ class Restaurant extends ChangeNotifier {
       name: "Cheeseburger 2",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.burgers,
       availableAddons: [
@@ -32,7 +32,7 @@ class Restaurant extends ChangeNotifier {
       name: "Cheeseburger 3",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.burgers,
       availableAddons: [
@@ -45,7 +45,7 @@ class Restaurant extends ChangeNotifier {
       name: "Salad 1",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.salads,
       availableAddons: [
@@ -57,7 +57,7 @@ class Restaurant extends ChangeNotifier {
       name: "salad 2",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.salads,
       availableAddons: [
@@ -69,7 +69,7 @@ class Restaurant extends ChangeNotifier {
       name: "salad 3",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.salads,
       availableAddons: [
@@ -82,7 +82,7 @@ class Restaurant extends ChangeNotifier {
       name: "side 1",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.sides,
       availableAddons: [
@@ -94,7 +94,7 @@ class Restaurant extends ChangeNotifier {
       name: "side 2",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.sides,
       availableAddons: [
@@ -106,7 +106,7 @@ class Restaurant extends ChangeNotifier {
       name: "side 3",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.sides,
       availableAddons: [
@@ -119,7 +119,7 @@ class Restaurant extends ChangeNotifier {
       name: "desert 1",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.deserts,
       availableAddons: [
@@ -131,7 +131,7 @@ class Restaurant extends ChangeNotifier {
       name: "desert 2",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.deserts,
       availableAddons: [
@@ -143,7 +143,7 @@ class Restaurant extends ChangeNotifier {
       name: "desert 3",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.deserts,
       availableAddons: [
@@ -156,7 +156,7 @@ class Restaurant extends ChangeNotifier {
       name: "soda 1",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.drinks,
       availableAddons: [
@@ -168,7 +168,7 @@ class Restaurant extends ChangeNotifier {
       name: "soda 2",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.drinks,
       availableAddons: [
@@ -180,7 +180,7 @@ class Restaurant extends ChangeNotifier {
       name: "soda 3",
       description:
           "Carne de vită, sos Chili Mayo, brânză Cheddar, mix salată, roșii felii, ceapă roșie,muraturi ,chifle pufoase cu unt aromatizat.",
-      imagePath: 'assets/b2.png',
+      imagePath: 'assets/cheeseburger.jpeg',
       price: 19.99,
       category: FoodCategory.drinks,
       availableAddons: [
