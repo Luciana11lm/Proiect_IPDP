@@ -8,3 +8,7 @@ Activity Diagram
 
 ![Activity_diagram drawio](https://github.com/Luciana11lm/Proiect_IPDP/assets/161320827/0a5e9fec-d102-42fc-b1c9-1d10a63e241c)
 
+Sequence Diagram
+
+
+<img width="1190" alt="Screenshot 2024-05-12 at 17 58 30" src="https://github.com/Luciana11lm/Proiect_IPDP/assets/149513220/9fea709b-e143-42a6-9ddd-e48da33a6cb4">
