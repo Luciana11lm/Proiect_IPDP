@@ -12,3 +12,6 @@ Sequence Diagram
 
 
 <img width="1190" alt="Screenshot 2024-05-12 at 17 58 30" src="https://github.com/Luciana11lm/Proiect_IPDP/assets/149513220/9fea709b-e143-42a6-9ddd-e48da33a6cb4">
+
+Class Diagram
+<img width="1060" alt="Screenshot 2024-05-12 at 21 03 20" src="https://github.com/Luciana11lm/Proiect_IPDP/assets/149513220/d58a8715-188e-4ee1-8717-f608e5b05565">
