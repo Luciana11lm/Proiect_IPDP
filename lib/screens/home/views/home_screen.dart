@@ -1,66 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:menu_app/components/my_food_tile.dart';
+import 'package:menu_app/components/my_silver_app_bar.dart';
 import 'package:menu_app/components/my_drawer.dart';
+import 'package:menu_app/components/my_tab_bar.dart';
+import 'package:menu_app/models/food.dart';
+import 'package:menu_app/models/restaurant.dart';
+import 'package:menu_app/screens/home/views/food_screen.dart';
+import 'package:provider/provider.dart';
 
-class HomeSceen extends StatelessWidget {
-  const HomeSceen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController =
+        TabController(length: FoodCategory.values.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  List<Food> _filterMenuByCategory(FoodCategory category, List<Food> fullMenu) {
+    return fullMenu.where((food) => food.category == category).toList();
+  }
+
+  List<Widget> getFoodInthisCategory(List<Food> fullMenu) {
+    return FoodCategory.values.map((category) {
+      List<Food> categoryMenu = _filterMenuByCategory(category, fullMenu);
+      return ListView.builder(
+        itemCount: categoryMenu.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          final food = categoryMenu[index];
+          return FoodTile(
+            food: food,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FoodScreen(food: food),
+              ),
+            ),
+          );
+        },
+      );
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
-        title: const Row(
-          children: [
-            SizedBox(
-              width: 8,
-            ),
-            Text(
-              'Home',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            )
+        drawer: const MyDrawer(),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            MySilverAppBar(
+                title: MyTabBar(tabController: _tabController),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  /*children: [
+                    Divider(
+                      indent: 25,
+                      endIndent: 25,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    RestaurantInfo()
+                  ],*/
+                ))
           ],
-        ),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.cart)),
-        ],
-      ),
-      drawer: const MyDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 9 / 16),
-            itemCount: 8,
-            itemBuilder: (context, int i) {
-              return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.shade300,
-                            offset: const Offset(3, 3))
-                      ]),
-                  child: Column(
-                    children: [
-                      Image.asset('assets/b1.png'),
-                      Row(
-                        children: [
-                          Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: const Text('Burger cu pui'))
-                        ],
-                      )
-                    ],
-                  ));
-            }),
-      ),
-    );
+          body: Consumer<Restaurant>(
+              builder: (context, restaurnat, child) => Container(
+                    color: Colors.white,
+                    child: TabBarView(
+                        controller: _tabController,
+                        children: getFoodInthisCategory(restaurnat.menu)),
+                  )),
+        ));
   }
 }

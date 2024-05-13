@@ -13,7 +13,6 @@ class MyDrawer extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       child: Column(
         children: [
-          //applog
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
             child: Image.asset(
