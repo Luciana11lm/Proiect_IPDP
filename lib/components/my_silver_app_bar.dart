@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:menu_app/screens/home/views/cart_screen.dart";
 
 class MySilverAppBar extends StatelessWidget {
   final Widget child;
@@ -13,7 +14,16 @@ class MySilverAppBar extends StatelessWidget {
       floating: false,
       pinned: true,
       actions: [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart))
+        IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CartScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.shopping_cart))
       ],
       backgroundColor: Theme.of(context).colorScheme.background,
       foregroundColor: Theme.of(context).colorScheme.inversePrimary,

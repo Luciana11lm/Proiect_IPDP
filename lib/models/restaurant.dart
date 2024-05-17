@@ -194,8 +194,9 @@ class Restaurant extends ChangeNotifier {
 
   //getters
   List<Food> get menu => _menu;
+    List<CartItem> get cart => _cart;
 
-  List<CartItem> _cart = [];
+  final List<CartItem> _cart = [];
 
   void addToCart(Food food, List<Addon> selectedAddons) {
     CartItem? cartItem = _cart.firstWhereOrNull((item) {
