@@ -16,8 +16,8 @@ class MyDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
             child: Image.asset(
-              'assets/logo.png',
-              scale: 5,
+              'assets/logo_app.png',
+              scale: 3,
             ),
           ),
           Padding(
