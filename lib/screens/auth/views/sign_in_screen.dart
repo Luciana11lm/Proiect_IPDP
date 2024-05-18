@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:menu_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:menu_app/screens/auth/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:menu_app/screens/auth/views/sign_up_screen.dart';
 import '../../../components/my_text_field.dart';
@@ -358,11 +357,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => BlocProvider(
-                                  create: (context) => SignUpBloc(
-                                    context
-                                        .read<AuthenticationBloc>()
-                                        .userRepository,
-                                  ),
+                                  create: (context) => SignUpBloc(),
                                   child: const SignUpScreen(),
                                 ),
                               ),

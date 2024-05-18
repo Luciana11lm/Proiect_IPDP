@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:menu_app/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:menu_app/repositories/models/user.dart';
 import 'package:menu_app/screens/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:menu_app/screens/auth/views/sign_in_screen.dart';
-import 'package:user_repository/user_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../components/my_text_field.dart';
@@ -360,19 +360,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               onPressed: () {
                                                 if (_formKey.currentState!
                                                     .validate()) {
-                                                  MyUser myUser = MyUser.empty;
-                                                  myUser.email =
-                                                      emailController.text;
-                                                  myUser.name =
-                                                      nameController.text;
+                                                  User myUser = User(
+                                                    email: emailController.text,
+                                                    firstName:
+                                                        nameController.text,
+                                                    lastName:
+                                                        nameController.text,
+                                                    password:
+                                                        passwordController.text,
+                                                    role: 'user',
+                                                  );
 
                                                   setState(() {
                                                     context
                                                         .read<SignUpBloc>()
                                                         .add(SignUpRequired(
-                                                            myUser,
-                                                            passwordController
-                                                                .text));
+                                                          firstName:
+                                                              myUser.firstName,
+                                                          lastName:
+                                                              myUser.lastName,
+                                                          email: myUser.email,
+                                                          password:
+                                                              myUser.password,
+                                                        ));
                                                   });
                                                 }
                                               },
@@ -514,7 +524,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   const SizedBox(height: 10),
                                   GestureDetector(
                                     onTap: () {
-                                      // Adaugă aici logica pentru acțiunea când este apăsat "Sign in"
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(

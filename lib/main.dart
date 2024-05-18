@@ -1,58 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:menu_app/models/restaurant.dart';
+import 'package:menu_app/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:menu_app/repositories/user_repository.dart';
+import 'package:menu_app/screens/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:menu_app/screens/home/views/home_screen.dart';
 import 'package:menu_app/screens/onbording/views/onbording.dart';
-import 'package:menu_app/simple_bloc_observer.dart';
+import 'package:menu_app/test/test_database_connection.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-void main() async {
+void main() {
+  // URL-ul de bază pentru comunicarea cu serverul
+  const baseUrl = 'http://menuipdp.000webhostapp.com/db.php';
+
+  // Inițializarea obiectului UserRepository
+  final userRepository = UserRepository(Uri.parse(baseUrl), baseUrl: baseUrl);
   WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
-  Bloc.observer = SimpleBlocObserver();
-  runApp(const MyAppWrapper());
+  testDatabaseConnection();
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<UserRepository>(
+          create: (_) => UserRepository(Uri.parse(baseUrl), baseUrl: baseUrl),
+        ),
+        Provider<SignInBloc>(
+          create: (_) => SignInBloc(userRepository),
+        ),
+        Provider<AuthenticationBloc>(
+          create: (context) => AuthenticationBloc(
+            userRepository: context.read<UserRepository>(),
+          ),
+        ),
+      ],
+      child: MyApp(userRepository: userRepository),
+    ),
+  );
 }
 
-class MyAppWrapper extends StatelessWidget {
-  const MyAppWrapper({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  final UserRepository userRepository;
+
+  const MyApp({super.key, required this.userRepository});
 
   @override
   Widget build(BuildContext context) {
-    const int _primaryValue = 0xfffb8500;
-    const MaterialColor customSwatch = MaterialColor(
-      _primaryValue,
-      <int, Color>{
-        50: Color(0xffffebcc),
-        100: Color(0xffffd699),
-        200: Color(0xffffc266),
-        300: Color(0xffffad33),
-        400: Color(0xffff9900),
-        500: Color(_primaryValue),
-        600: Color(0xffe67e00),
-        700: Color(0xffcc7400),
-        800: Color(0xffb36900),
-        900: Color(0xff995e00),
-      },
-    );
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => AuthService()),
-        ChangeNotifierProvider(create: (context) => Restaurant()),
-      ],
-      child: Consumer<AuthService>(
-        builder: (context, authService, _) {
-          return MaterialApp(
-            home: authService.isAuthenticated
-                ? const HomeScreen()
-                : const OnBordingScreen(),
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: customSwatch,
-            ),
-          );
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.orange,
+      ),
+      home: FutureBuilder(
+        future: userRepository
+            .user.last, // Verificăm starea de autentificare a utilizatorului
+        builder: (context, snapshot) {
+          if (!userRepository.dataLoaded) {
+            return const CircularProgressIndicator(); // Afișăm un indicator de încărcare
+          } else {
+            if (snapshot.hasData && snapshot.data != null) {
+              // Dacă utilizatorul este autentificat, afișăm ecranul principal
+              return const HomeScreen();
+            } else {
+              // Dacă utilizatorul nu este autentificat, afișăm ecranul de onboarding
+              return const OnBordingScreen();
+            }
+          }
         },
       ),
     );
