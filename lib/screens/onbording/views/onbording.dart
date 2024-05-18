@@ -1,23 +1,26 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:menu_app/app.dart';
 import 'package:menu_app/screens/onbording/views/intro_screens/intro_page3.dart';
 import 'package:menu_app/screens/onbording/views/intro_screens/intro_page_1.dart';
 import 'package:menu_app/screens/onbording/views/intro_screens/intro_page_2.dart';
-import 'package:menu_app/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:user_repository/user_repository.dart';
 
 class OnBordingScreen extends StatefulWidget {
-  const OnBordingScreen({super.key});
+  const OnBordingScreen({Key? key}) : super(key: key);
 
   @override
-  State<OnBordingScreen> createState() => _OnBordingScreenState();
+  _OnBordingScreenState createState() => _OnBordingScreenState();
 }
 
 class _OnBordingScreenState extends State<OnBordingScreen> {
+  late Future<List<dynamic>> _data;
   final PageController _controller = PageController();
 
   //keep track if we're on the last page
@@ -32,6 +35,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
   @override
   void initState() {
     super.initState();
+    _data = getData();
     _timer = Timer.periodic(
       const Duration(seconds: 5),
       (timer) {
@@ -42,6 +46,20 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
         }
       },
     );
+  }
+
+  Future<List<dynamic>> getData() async {
+    var url = 'https://menuipdp.000webhostapp.com/get.php';
+    http.Response response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      if (kDebugMode) {
+        print(data.toString());
+      }
+      return data;
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 
   @override
@@ -85,7 +103,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ChangeNotifierProvider(
-                              create: (context) => ThemeProvider(),
+                              create: (BuildContext context) {},
                               child: MyApp(FirebaseUserRepo()),
                             ),
                           ),
@@ -140,7 +158,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ChangeNotifierProvider(
-                                create: (context) => ThemeProvider(),
+                                create: (BuildContext context) {},
                                 child: MyApp(FirebaseUserRepo()),
                               ),
                             ),
