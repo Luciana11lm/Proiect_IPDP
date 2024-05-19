@@ -194,7 +194,7 @@ class Restaurant extends ChangeNotifier {
 
   //getters
   List<Food> get menu => _menu;
-    List<CartItem> get cart => _cart;
+  List<CartItem> get cart => _cart;
 
   final List<CartItem> _cart = [];
 
@@ -247,5 +247,32 @@ class Restaurant extends ChangeNotifier {
   void clearCart() {
     _cart.clear();
     notifyListeners();
+  }
+
+  String _formatPrice(double price) {
+    return "\$" + price.toStringAsFixed(2);
+  }
+
+  String _formatAddons(List<Addon> addons) {
+    return addons
+        .map((addon) => "${addon.name} (${_formatPrice(addon.price)})")
+        .join(",");
+  }
+
+  String displayCartReceipt() {
+    final receipt = StringBuffer();
+
+    for (final CartItem in _cart) {
+      receipt.writeln(
+          "${CartItem.quantity} x ${CartItem.food.name} - ${_formatPrice(CartItem.food.price)} ");
+      if (CartItem.selectedAddons.isNotEmpty) {
+        receipt
+            .writeln("     Add-ons: ${_formatAddons(CartItem.selectedAddons)}");
+      }
+    }
+    receipt.writeln("_______________");
+    receipt.writeln("Total items: ${getTotalItemCount()}");
+    receipt.writeln("Total price: ${_formatPrice(getTotalPrice())}");
+    return receipt.toString();
   }
 }

@@ -3,6 +3,7 @@ import 'package:menu_app/components/my_button.dart';
 import 'package:menu_app/components/my_cart_tile.dart';
 import 'package:menu_app/models/cart_items.dart';
 import 'package:menu_app/models/restaurant.dart';
+import 'package:menu_app/screens/home/views/checkout_screen.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatelessWidget {
@@ -66,7 +67,7 @@ class CartScreen extends StatelessWidget {
                 ],
               ),
             ),
-            MyButton(onTap: () {}, text: "Go to checkout"),
+            MyButton(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CheckoutScreen())), text: "Go to checkout"),
             const SizedBox(
               height: 25,
             )
