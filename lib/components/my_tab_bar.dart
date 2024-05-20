@@ -1,6 +1,5 @@
-import "package:flutter/foundation.dart";
-import "package:flutter/material.dart";
-import "package:menu_app/models/food.dart";
+import 'package:flutter/material.dart';
+import 'package:menu_app/models/food.dart';
 
 class MyTabBar extends StatelessWidget {
   final TabController tabController;
@@ -9,7 +8,14 @@ class MyTabBar extends StatelessWidget {
   List<Tab> _buildCategoryTabs() {
     return FoodCategory.values.map((category) {
       return Tab(
-        text: category.toString().split(".").last,
+        child: Container(
+          width: 200,
+          height: 20,
+          alignment: Alignment.center,
+          child: Text(
+            category.toString().split('.').last,
+          ),
+        ),
       );
     }).toList();
   }
@@ -17,9 +23,24 @@ class MyTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
+      child: PreferredSize(
+        preferredSize: Size.fromHeight(0), // Adjust the height as needed
         child: TabBar(
-      controller: tabController,
-      tabs: _buildCategoryTabs(),
-    ));
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicator: ShapeDecoration(
+            color: Colors.orange,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.black,
+          padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+          controller: tabController,
+          tabs: _buildCategoryTabs(),
+        ),
+      ),
+    );
   }
 }

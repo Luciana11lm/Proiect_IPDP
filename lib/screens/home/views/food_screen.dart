@@ -35,10 +35,20 @@ class _FoodScreenState extends State<FoodScreen> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Scaffold(
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Image.asset(widget.food.imagePath),
+              SizedBox(
+                height: 20,
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.asset(
+                  widget.food.imagePath,
+                  width: 380,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: Column(
@@ -62,7 +72,9 @@ class _FoodScreenState extends State<FoodScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Divider(color: Theme.of(context).colorScheme.secondary),
+                    Divider(
+                      color: Colors.orange,
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -73,8 +85,7 @@ class _FoodScreenState extends State<FoodScreen> {
                             fontWeight: FontWeight.bold)),
                     Container(
                       decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Theme.of(context).colorScheme.tertiary),
+                          border: Border.all(color: Colors.orange),
                           borderRadius: BorderRadius.circular(8)),
                       child: ListView.builder(
                           shrinkWrap: true,
@@ -84,6 +95,7 @@ class _FoodScreenState extends State<FoodScreen> {
                           itemBuilder: (context, index) {
                             Addon addon = widget.food.availableAddons[index];
                             return CheckboxListTile(
+                              activeColor: Colors.orange,
                               title: Text(addon.name),
                               subtitle: Text("\$${addon.price}",
                                   style: TextStyle(
@@ -115,7 +127,7 @@ class _FoodScreenState extends State<FoodScreen> {
       ),
       SafeArea(
         child: Opacity(
-          opacity: 0.6,
+          opacity: 0.4,
           child: Container(
             margin: EdgeInsets.only(left: 25),
             decoration: BoxDecoration(
