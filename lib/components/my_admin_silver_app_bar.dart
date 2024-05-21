@@ -26,8 +26,8 @@ class MyAdminSilverAppBar extends StatelessWidget {
             },
             icon: const Icon(Icons.edit))
       ],
-      backgroundColor: Theme.of(context).colorScheme.background,
-      foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.grey[700],
       title: const Center(child: Text("Sunset Diner")),
       flexibleSpace: FlexibleSpaceBar(
         background: Padding(

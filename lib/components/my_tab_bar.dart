@@ -24,22 +24,19 @@ class MyTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: PreferredSize(
-        preferredSize: Size.fromHeight(0), // Adjust the height as needed
-        child: TabBar(
-          indicatorSize: TabBarIndicatorSize.tab,
-          indicator: ShapeDecoration(
-            color: Colors.orange,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
+      child: TabBar(
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicator: ShapeDecoration(
+          color: Colors.orange,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.black,
-          padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-          controller: tabController,
-          tabs: _buildCategoryTabs(),
         ),
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.grey[700],
+        padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+        controller: tabController,
+        tabs: _buildCategoryTabs(),
       ),
     );
   }

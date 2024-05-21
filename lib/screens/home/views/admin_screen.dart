@@ -65,30 +65,33 @@ class _AdminScreen extends State<AdminScreen>
 
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const MyAdminDrawer(),
-        body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            MyAdminSilverAppBar(
-                title: MyTabBar(tabController: _tabController),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  /*children: [
-                    Divider(
-                      indent: 25,
-                      endIndent: 25,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    RestaurantInfo()
-                  ],*/
-                ))
-          ],
-          body: Consumer<Restaurant>(
-              builder: (context, restaurnat, child) => Container(
-                    color: Colors.white,
-                    child: TabBarView(
-                        controller: _tabController,
-                        children: getFoodInthisCategory(restaurnat.menu)),
-                  )),
-        ));
+      drawer: const MyAdminDrawer(),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          MyAdminSilverAppBar(
+              title: MyTabBar(tabController: _tabController),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Divider(
+                    indent: 25,
+                    endIndent: 25,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  //RestaurantInfo()
+                ],
+              ))
+        ],
+        body: Consumer<Restaurant>(
+          builder: (context, restaurnat, child) => Container(
+            color: Colors.white,
+            child: TabBarView(
+              controller: _tabController,
+              children: getFoodInthisCategory(restaurnat.menu),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
