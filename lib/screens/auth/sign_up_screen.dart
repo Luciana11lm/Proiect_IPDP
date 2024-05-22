@@ -5,11 +5,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/route_manager.dart';
 import 'package:menu_app/api_connection/api_connection.dart';
+import 'package:menu_app/fragments/user/dashboard_of_fragments.dart';
 import 'package:menu_app/repositories/models/user.dart';
 import 'package:menu_app/screens/auth/sign_in_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:menu_app/screens/home/user_screen/home_screen.dart';
+import 'package:menu_app/fragments/admin/admin_upload_items.dart';
 import '../../components/my_text_field.dart';
 import 'package:http/http.dart' as http;
 
@@ -94,12 +95,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
             firstNameController.clear();
             lastNameController.clear();
             emailController.clear();
-            //roleController.clear();
           });
           // ne mutam pe pagina principala
-          Future.delayed(const Duration(microseconds: 2000), () {
-            Get.to(() => const HomeScreen());
-          });
+          if (roleController.value == "client") {
+            Future.delayed(const Duration(microseconds: 2000), () {
+              Get.to(() => DashboardOfFragments());
+            });
+          } else {
+            Future.delayed(const Duration(microseconds: 2000), () {
+              Get.to(() => AdminUploadItems());
+            });
+          }
         } else {
           Fluttertoast.showToast(msg: "Error occurred. Try again.");
         }

@@ -27,6 +27,7 @@ dependencies:
   fluttertoast: ^8.2.5
   get: ^4.6.6
   font_awesome_flutter: ^10.7.0
+  image_picker: ^1.1.1
 
 dev_dependencies:
   flutter_test:

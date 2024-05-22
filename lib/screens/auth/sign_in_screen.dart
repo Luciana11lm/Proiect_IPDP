@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
 import 'package:menu_app/api_connection/api_connection.dart';
-import 'package:menu_app/fragments/dashboard_of_fragments.dart';
+import 'package:menu_app/fragments/user/dashboard_of_fragments.dart';
 import 'package:menu_app/repositories/models/user.dart';
 import 'package:menu_app/repositories/userPreferences/user_preferences.dart';
 import 'package:menu_app/screens/auth/sign_up_screen.dart';
+import 'package:menu_app/fragments/admin/admin_upload_items.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/my_text_field.dart';
 import 'package:http/http.dart' as http;
 
@@ -37,6 +39,20 @@ class _SignInScreenState extends State<SignInScreen> {
     end: Alignment.bottomRight,
   );
 
+  // Function to save rememberMe state
+  void _saveRememberMe() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('rememberMe', rememberMe);
+  }
+
+  // Function to load rememberMe state
+  void _loadRememberMe() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      rememberMe = prefs.getBool('rememberMe') ?? false;
+    });
+  }
+
   loginUserNow() async {
     try {
       var res = await http.post(
@@ -54,9 +70,15 @@ class _SignInScreenState extends State<SignInScreen> {
           User userInfo = User.fromJson(resBodyOfLogIn["userData"]);
           //se salveaza informatiile utilizatorului in local storage cu SharedPreferences
           await RememberUserPrefs.storeUserInfo(userInfo);
-          Future.delayed(const Duration(microseconds: 2000), () {
-            Get.to(() => DashboardOfFragments());
-          });
+          if (userInfo.role == "client") {
+            Future.delayed(const Duration(microseconds: 2000), () {
+              Get.to(() => DashboardOfFragments());
+            });
+          } else {
+            Future.delayed(const Duration(microseconds: 2000), () {
+              Get.to(() => AdminUploadItems());
+            });
+          }
         } else {
           Fluttertoast.showToast(msg: "Incorrect credentials.");
         }
