@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:menu_app/screens/auth/views/sign_in_screen.dart';
+import 'package:menu_app/screens/auth/sign_in_screen.dart';
 import 'package:menu_app/screens/onbording/views/intro_screens/intro_page3.dart';
 import 'package:menu_app/screens/onbording/views/intro_screens/intro_page_1.dart';
 import 'package:menu_app/screens/onbording/views/intro_screens/intro_page_2.dart';

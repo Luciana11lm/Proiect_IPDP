@@ -1,0 +1,26 @@
+import 'dart:convert';
+import 'package:menu_app/repositories/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class RememberUserPrefs {
+  //remember user info locally
+  static Future<void> storeUserInfo(User userInfo) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String userJsonData = jsonEncode(
+        userInfo.toJson()); // se salveaza datele local in format json
+    await preferences.setString("currentUser", userJsonData);
+    //se salveaza local datele userului logat
+  }
+
+  //get-read User-info
+  static Future<User?> readUserInfo() async {
+    User? currentUserInfo;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? userInfo = preferences.getString("currentUser");
+    if (userInfo != null) {
+      Map<String, dynamic> userDataMap = jsonDecode(userInfo);
+      currentUserInfo = User.fromJson(userDataMap);
+    }
+    return currentUserInfo;
+  }
+}

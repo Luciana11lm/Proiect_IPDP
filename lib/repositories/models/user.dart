@@ -1,48 +1,43 @@
+// ignore_for_file: unnecessary_this
+
 class User {
-  final int? id;
-  String email;
+  int? idUser;
   String firstName;
   String lastName;
+  String email;
   String password;
   String role;
 
-  User({
-    this.id,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    required this.password,
-    required this.role,
-  });
+  // constructor
+  User(
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.password,
+    this.role,
+  );
 
-  static var empty =
-      User(email: '', firstName: '', lastName: '', password: '', role: '');
+  // constructor cu id
+  User.withId(
+    this.idUser,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.password,
+    this.role,
+  );
 
-  bool get isEmpty => this == User.empty;
-
-  bool get isNotEmpty => this != User.empty;
-
-  // Metodă pentru a crea un obiect User dintr-un JSON
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'],
-      email: json['email'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      password: json['password'],
-      role: json['role'],
-    );
-  }
+  factory User.fromJson(Map<String, dynamic> json) => User(json["firstName"],
+      json["lastName"], json["email"], json["password"], json["role"]);
 
   // Metodă pentru a converti un obiect User într-un JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'password': password,
-      'role': role,
+      'firstName': this.firstName.toString(),
+      'lastName': this.lastName.toString(),
+      'email': this.email.toString(),
+      'password': this.password.toString(),
+      'role': this.role.toString(),
     };
   }
 }
