@@ -7,10 +7,12 @@ import 'package:menu_app/fragments/admin/products_fragment.dart';
 import 'package:menu_app/fragments/user/home_fragment_screen.dart';
 import 'package:menu_app/fragments/user/order_fragment_screen.dart';
 import 'package:menu_app/fragments/user/profile_fragment_screen.dart';
+import 'package:menu_app/repositories/restaurantPreferences/current_restaurant.dart';
 import 'package:menu_app/repositories/userPreferences/current_user.dart';
 
 class AdminUploadItems extends StatelessWidget {
-  final CurrentUser _rememberCurrentUser = Get.put(CurrentUser());
+  final CurrentRestaurant _rememberCurrentRestaurant =
+      Get.put(CurrentRestaurant());
   final List<Widget> _fragmentScreens = [
     ProductsFragmentScreen(),
     AdminOrdersFragment(),
@@ -40,9 +42,9 @@ class AdminUploadItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: CurrentUser(),
+      init: CurrentRestaurant(),
       initState: (currentState) {
-        _rememberCurrentUser.getUserInfo();
+        _rememberCurrentRestaurant.getRestaurantInfo();
       },
       builder: (controller) {
         return Scaffold(

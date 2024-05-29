@@ -6,11 +6,13 @@ import 'package:menu_app/fragments/user/dashboard_of_fragments.dart';
 import 'package:menu_app/repositories/userPreferences/user_preferences.dart';
 import 'package:menu_app/screens/onbording/views/onbording.dart';
 import 'package:menu_app/test/test_database_connection.dart';
+import 'package:menu_app/test/test_restaurant_connection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   testDatabaseConnection();
+  testRestaurantConnection();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool rememberMe = prefs.getBool('rememberMe') ?? false;
   runApp(MyApp(rememberMe: rememberMe));

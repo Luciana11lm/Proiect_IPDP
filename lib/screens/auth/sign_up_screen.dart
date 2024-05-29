@@ -10,7 +10,6 @@ import 'package:menu_app/repositories/models/user.dart';
 import 'package:menu_app/screens/auth/sign_in_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:menu_app/fragments/admin/admin_upload_items.dart';
 import '../../components/my_text_field.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,8 +26,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final emailController = TextEditingController();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
-  final ValueNotifier<String> roleController = ValueNotifier<String>('client');
-  //final roleController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   IconData iconPassword = CupertinoIcons.eye_fill;
   bool obscurePassword = true;
@@ -80,8 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         firstNameController.text.trim(),
         lastNameController.text.trim(),
         emailController.text.trim(),
-        passwordController.text.trim(),
-        roleController.value);
+        passwordController.text.trim());
     try {
       var res = await http.post(
         Uri.parse(API.signUp),
@@ -97,15 +93,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             emailController.clear();
           });
           // ne mutam pe pagina principala
-          if (roleController.value == "client") {
-            Future.delayed(const Duration(microseconds: 2000), () {
-              Get.to(() => DashboardOfFragments());
-            });
-          } else {
-            Future.delayed(const Duration(microseconds: 2000), () {
-              Get.to(() => AdminUploadItems());
-            });
-          }
+          Future.delayed(const Duration(microseconds: 2000), () {
+            Get.to(() => DashboardOfFragments());
+          });
         } else {
           Fluttertoast.showToast(msg: "Error occurred. Try again.");
         }
@@ -447,44 +437,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ],
                               ),
                               const SizedBox(height: 10),
-
-                              // selectie tip de utilizator - admin/client
-                              ValueListenableBuilder<String>(
-                                valueListenable: roleController,
-                                builder: (context, value, child) {
-                                  return SizedBox(
-                                    width: 250,
-                                    child: DropdownButtonFormField<String>(
-                                      value: value,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(60),
-                                          borderSide: const BorderSide(
-                                            color: Color.fromARGB(
-                                                255, 235, 193, 5),
-                                            width: 0.1,
-                                          ),
-                                        ),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                      ),
-                                      onChanged: (String? newValue) {
-                                        roleController.value = newValue!;
-                                      },
-                                      items: <String>['client', 'admin']
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Center(child: Text(value)),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  );
-                                },
-                              ),
                               SizedBox(
                                   height: MediaQuery.of(context).size.height *
                                       0.02),

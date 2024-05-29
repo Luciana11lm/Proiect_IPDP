@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:menu_app/repositories/userPreferences/current_user.dart';
+import 'package:menu_app/repositories/restaurantPreferences/current_restaurant.dart';
 import 'package:menu_app/repositories/userPreferences/user_preferences.dart';
 import 'package:menu_app/screens/auth/sign_in_screen.dart';
 
 class AdminProfileFragmentScreen extends StatelessWidget {
-  final CurrentUser _currentUser = Get.put(CurrentUser());
+  final CurrentRestaurant _currentRestaurant = Get.put(CurrentRestaurant());
 
   signOutUser() async {
     var resultResponse = await Get.dialog(
@@ -52,16 +51,18 @@ class AdminProfileFragmentScreen extends StatelessWidget {
     if (resultResponse == "loggedOut") {
       // remove the user data from phone local storage
       RememberUserPrefs.removeUserInfo().then((value) {
-        Get.off(SignInScreen());
+        Get.off(const SignInScreen());
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    String firstNameUser = _currentUser.user.firstName;
-    String lastNameUser = _currentUser.user.lastName;
-    String passwordUser = _currentUser.user.password;
+    String? name = _currentRestaurant.restaurant.name;
+    String? description = _currentRestaurant.restaurant.description;
+    String? city = _currentRestaurant.restaurant.city;
+    String? street = _currentRestaurant.restaurant.street;
+    String? number = _currentRestaurant.restaurant.number;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -78,25 +79,26 @@ class AdminProfileFragmentScreen extends StatelessWidget {
                     backgroundImage: AssetImage('assets/profile_pic.png'),
                   ),
                   const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "$firstNameUser $lastNameUser",
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "$name",
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        // aici o sa inlocuiesc cu numele restaurantului pentru admin
-                        'Food enthusiast and recipe lover',
-                        style: TextStyle(
-                          fontSize: 16,
+                        const SizedBox(height: 8),
+                        Text(
+                          "$description",
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

@@ -6,7 +6,6 @@ class User {
   String lastName;
   String email;
   String password;
-  String role;
 
   // constructor
   User(
@@ -14,7 +13,6 @@ class User {
     this.lastName,
     this.email,
     this.password,
-    this.role,
   );
 
   // constructor cu id
@@ -24,11 +22,10 @@ class User {
     this.lastName,
     this.email,
     this.password,
-    this.role,
   );
 
-  factory User.fromJson(Map<String, dynamic> json) => User(json["firstName"],
-      json["lastName"], json["email"], json["password"], json["role"]);
+  factory User.fromJson(Map<String, dynamic> json) => User(
+      json["firstName"], json["lastName"], json["email"], json["password"]);
 
   // Metodă pentru a converti un obiect User într-un JSON
   Map<String, dynamic> toJson() {
@@ -37,7 +34,6 @@ class User {
       'lastName': this.lastName.toString(),
       'email': this.email.toString(),
       'password': this.password.toString(),
-      'role': this.role.toString(),
     };
   }
 }

@@ -1,14 +1,15 @@
 import 'dart:io';
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:menu_app/api_connection/api_connection.dart';
+import 'package:menu_app/fragments/admin/admin_upload_items.dart';
+import 'package:menu_app/repositories/models/product.dart';
+import 'package:menu_app/repositories/restaurantPreferences/current_restaurant.dart';
 
 class ProductsFragmentScreen extends StatefulWidget {
   const ProductsFragmentScreen({super.key});
@@ -18,6 +19,7 @@ class ProductsFragmentScreen extends StatefulWidget {
 }
 
 class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
+  final CurrentRestaurant _currentRestaurant = Get.put(CurrentRestaurant());
   final ImagePicker _picker = ImagePicker();
   XFile? pickedImageXFile;
   var formKey = GlobalKey<FormState>();
@@ -28,6 +30,35 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
   var ingredientsController = TextEditingController();
   var descriptionController = TextEditingController();
   var imageLink = "";
+
+  // functie pentru a lua produsele restaurantului curent din baza de date si a le afisa
+  Future<List<Product>> getRestaurantProducts(String idRestaurant) async {
+    List<Product> restaurantProductsList = [];
+
+    try {
+      var res = await http.post(
+        Uri.parse(API.getRestaurantProductsList),
+        body: {'idRestaurant': idRestaurant},
+      );
+      if (res.statusCode == 200) {
+        print("Response: ${res.body}");
+        var responseBodyOfProducts = jsonDecode(res.body);
+        if (responseBodyOfProducts["success"]) {
+          (responseBodyOfProducts["itemsData"] as List).forEach((eachRecord) {
+            restaurantProductsList.add(Product.fromJson(eachRecord));
+          });
+        } else {
+          Fluttertoast.showToast(msg: "No products found.");
+        }
+      } else {
+        Fluttertoast.showToast(msg: "Error status code is not 200");
+      }
+    } catch (errorMsg) {
+      print("Error:: " + errorMsg.toString());
+    }
+
+    return restaurantProductsList;
+  }
 
   //default screen methods
   captureImageWithPhoneCamera() async {
@@ -122,18 +153,19 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
     //despartitor pentru tag-uri si ingrediente
     List<String> tagsList = tagsController.text.split(',');
     List<String> ingredientsList = ingredientsController.text.split(',');
+    var priceProduct = double.tryParse(priceController.text.trim());
     try {
       var response = await http.post(
         Uri.parse(API.uploadNewItem),
         body: {
-          'item_id': '1',
-          'name': nameController.text.trim.toString(),
-          'price': priceController.text.trim.toString(),
+          'name': nameController.text.toString(),
+          'price': priceProduct.toString(),
           'ingredients': ingredientsList.toString(),
-          'description': descriptionController.text.trim.toString(),
+          'description': descriptionController.text.toString(),
           'imageUrl': imageLink.toString(),
           'rating': ratingController.text.trim().toString(),
           'tags': tagsList.toString(),
+          'idRestaurant': _currentRestaurant.restaurant.idRestaurant.toString(),
         },
       );
 
@@ -141,8 +173,16 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
         var resBodyOfUploadItem = jsonDecode(response.body);
         if (resBodyOfUploadItem['success']) {
           Fluttertoast.showToast(msg: "New product added successfully!");
-          setState(() => pickedImageXFile = null);
-          Get.to(const ProductsFragmentScreen());
+          setState(() {
+            pickedImageXFile = null;
+            nameController.clear();
+            ratingController.clear();
+            tagsController.clear();
+            priceController.clear();
+            ingredientsController.clear();
+            descriptionController.clear();
+          });
+          Get.to(() => AdminUploadItems());
         } else {
           Fluttertoast.showToast(msg: "Product not uploaded.\n Try again!");
         }
@@ -161,13 +201,22 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
         leading: IconButton(
           icon: const Icon(Icons.clear),
           onPressed: () {
-            Get.to(() => defaultScreen());
+            setState(() {
+              pickedImageXFile = null;
+              nameController.clear();
+              ratingController.clear();
+              tagsController.clear();
+              priceController.clear();
+              ingredientsController.clear();
+              descriptionController.clear();
+            });
+            Get.to(() => defaultScreen(context));
           },
         ),
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => defaultScreen());
+              Get.to(() => defaultScreen(context));
             },
             child: const Text(
               "Done",
@@ -542,97 +591,128 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
     );
   }
 
-  Widget defaultScreen() {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          ListView.builder(
-            padding:
-                const EdgeInsets.only(bottom: 80), // Leave space for the button
-            itemCount: 10, // Simulated number of products
-            itemBuilder: (context, index) {
-              return Card(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+  Widget defaultScreen(context) {
+    return FutureBuilder<List<Product>>(
+      future: getRestaurantProducts(
+          _currentRestaurant.restaurant.idRestaurant.toString()),
+      builder: (context, AsyncSnapshot<List<Product>> dataSnapShot) {
+        if (dataSnapShot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (dataSnapShot.hasError) {
+          return const Center(child: Text("An error occurred"));
+        }
+        if (dataSnapShot.data == null) {
+          return const Center(child: Text("No items found"));
+        }
+        if (dataSnapShot.data!.isNotEmpty) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Stack(
+              children: [
+                ListView.builder(
+                  padding: const EdgeInsets.only(
+                      bottom: 80), // Leave space for the button
+                  itemCount: dataSnapShot.data!.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    Product eachProductData = dataSnapShot.data![index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: ListTile(
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: FadeInImage(
+                            height: 50,
+                            width: 50,
+                            fit: BoxFit.cover,
+                            placeholder: const AssetImage('assets/Menu.png'),
+                            image: NetworkImage(eachProductData.imageUrl!),
+                            imageErrorBuilder:
+                                (context, error, stackTraceError) {
+                              return const Center(
+                                child: Icon(Icons.broken_image_outlined),
+                              );
+                            },
+                          ),
+                        ),
+                        title: Text(
+                          eachProductData.name.toString(),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(
+                          eachProductData.description.toString(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        trailing: Text(
+                          eachProductData.price.toString(),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                child: ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image.network(
-                      'https://via.placeholder.com/50', // Placeholder image URL
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
+                Positioned(
+                  bottom: 20,
+                  left: 20,
+                  right: 20,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showDialogBoxForImagePickingAndCapturing();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
-                  ),
-                  title: Text(
-                    'Product Name $index',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: const Text(
-                    'Product description goes here.',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  trailing: Text(
-                    '\$${(index + 1) * 5}.99',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.orange,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(FontAwesomeIcons.plus),
+                        SizedBox(width: 10),
+                        Text(
+                          'Add a New Product',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              );
-            },
-          ),
-          Positioned(
-            bottom: 20,
-            left: 20,
-            right: 20,
-            child: ElevatedButton(
-              onPressed: () {
-                // Add your logic for adding a new product here
-                showDialogBoxForImagePickingAndCapturing();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(FontAwesomeIcons.plus),
-                  SizedBox(width: 10),
-                  Text(
-                    'Add a New Product',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return const Center(
+            child: Text("Empty, no data "),
+          );
+        }
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return pickedImageXFile == null ? defaultScreen() : uploadItemFromScreen();
+    return pickedImageXFile == null
+        ? defaultScreen(context)
+        : uploadItemFromScreen();
   }
 }

@@ -1,41 +1,46 @@
-import 'extra_ingredients.dart';
-import 'product.dart';
+import 'package:flutter/material.dart';
 
 class Order {
-  final int id;
-  final List<Product> products; // Lista de produse din comandă
-  final Map<Product, List<ExtraIngredients>>
-      productsWithExtras; // Produsele din comandă cu ingredientele suplimentare asociate
-  final double totalPrice; // Prețul total al comenzii
+  int? idOrder;
+  int? idUser;
+  int? idRestaurant;
+  DateTime? orderDateTime;
+  DateTime? bookingDateTime;
+  int? numberOfPeople;
+  double? totalPrice;
 
   Order({
-    required this.id,
-    required this.products,
-    required this.productsWithExtras,
-    required this.totalPrice,
+    this.idUser,
+    this.idRestaurant,
+    this.orderDateTime,
+    this.bookingDateTime,
+    this.numberOfPeople,
+    this.totalPrice,
   });
 
+// Method to create an Order object from JSON
   factory Order.fromJson(Map<String, dynamic> json) {
-    // Parsăm lista de produse din comandă
-    List<Product> products = (json['products'] as List)
-        .map((productJson) => Product.fromJson(productJson))
-        .toList();
-
-    // Parsăm lista de produse cu ingrediente suplimentare
-    Map<Product, List<ExtraIngredients>> productsWithExtras = {};
-    json['productsWithExtras'].forEach((productJson, extrasJson) {
-      Product product = Product.fromJson(productJson);
-      List<ExtraIngredients> extras = (extrasJson as List)
-          .map((extraJson) => ExtraIngredients.fromJson(extraJson))
-          .toList();
-      productsWithExtras[product] = extras;
-    });
-
     return Order(
-      id: json['id'],
-      products: products,
-      productsWithExtras: productsWithExtras,
-      totalPrice: json['totalPrice'].toDouble(),
+      //idOrder: json['idOrder'],
+      idUser: json['idUser'],
+      idRestaurant: json['idRestaurant'],
+      orderDateTime: DateTime.parse(json['orderDateTime']),
+      bookingDateTime: DateTime.parse(json['bookingDateTime']),
+      numberOfPeople: json['numberOfPeople'],
+      totalPrice: (json['totalPrice'] as num?)?.toDouble(),
     );
+  }
+
+  // Method to convert an Order object to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'idOrder': idOrder,
+      'idUser': idUser,
+      'idRestaurant': idRestaurant,
+      'orderDateTime': orderDateTime?.toIso8601String(),
+      'bookingDateTime': bookingDateTime?.toIso8601String(),
+      'numberOfPeople': numberOfPeople,
+      'totalPrice': totalPrice,
+    };
   }
 }

@@ -1,0 +1,18 @@
+<?php
+  include '../connection.php';
+
+  $currentOnlineUserID = $_POST["currentOnlineUserID"];
+
+  $sqlQuery = "SELECT * FROM Cart CROSS JOIN Product WHERE Cart.idUser = '$currentOnlineUserID' AND Cart.idProduct = Product.isProduct";
+
+  if($resultOfQuery->num_rows > 0) { //allow user to log in
+    $cartRecord = array();
+    while($rowFound = $resultOfQuery->fetch_assoc()){ //rowFound gets data from result as an associative array
+      $cartRecord[] = $rowFound;
+    }
+    echo json_encode(array("success"=>true,
+                           "currentUserCartData"=>$cartRecord,
+                          )); //transmits user info to the application
+  } else { 
+    echo json_encode(array("success"=>false));
+  }

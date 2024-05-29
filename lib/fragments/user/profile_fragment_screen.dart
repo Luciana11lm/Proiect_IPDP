@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:menu_app/repositories/userPreferences/current_user.dart';
 import 'package:menu_app/repositories/userPreferences/user_preferences.dart';
 import 'package:menu_app/screens/auth/sign_in_screen.dart';
@@ -59,7 +58,7 @@ class _ProfileFragmentScreenState extends State<ProfileFragmentScreen> {
     if (resultResponse == "loggedOut") {
       // remove the user data from phone local storage
       RememberUserPrefs.removeUserInfo().then((value) {
-        Get.off(SignInScreen());
+        Get.off(const SignInScreen());
       });
     }
   }

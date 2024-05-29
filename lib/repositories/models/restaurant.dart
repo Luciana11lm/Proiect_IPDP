@@ -1,26 +1,45 @@
-import 'address.dart';
-
-import 'menu.dart'; // Importăm clasa Menu pentru a folosi meniurile în restaurant
-
 class Restaurant {
-  final int id;
-  final String name;
-  final Address address; // Adresa restaurantului
-  final Menu menu; // Meniul restaurantului
+  int? idRestaurant;
+  String? name;
+  String? city;
+  String? street;
+  String? number;
+  String? description;
+  String? imageRestaurantUrl;
+  String? passwordRestaurant;
 
   Restaurant({
-    required this.id,
-    required this.name,
-    required this.address,
-    required this.menu,
+    this.idRestaurant,
+    this.name,
+    this.city,
+    this.street,
+    this.number,
+    this.description,
+    this.imageRestaurantUrl,
+    this.passwordRestaurant,
   });
 
-  factory Restaurant.fromJson(Map<String, dynamic> json) {
-    return Restaurant(
-      id: json['id'],
-      name: json['name'],
-      address: Address.fromJson(json['address']),
-      menu: Menu.fromJson(json['menu']),
-    );
+  factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
+      idRestaurant: int.parse(json["idRestaurant"]),
+      name: json["name"],
+      city: json["city"],
+      street: json["street"],
+      number: json["number"],
+      description: json["description"],
+      imageRestaurantUrl: json["imageRestaurantUrl"],
+      passwordRestaurant: json["passwordRestaurant"]);
+
+  // Metodă pentru a converti un obiect Restaurant într-un JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'idRestaurant': this.idRestaurant.toString(),
+      'name': this.name.toString(),
+      'city': this.city.toString(),
+      'street': this.street.toString(),
+      'description': this.description.toString(),
+      'number': this.number.toString(),
+      'imageRestaurantUrl': this.imageRestaurantUrl.toString(),
+      'passwordRestaurant': this.passwordRestaurant.toString(),
+    };
   }
 }
