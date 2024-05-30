@@ -24,12 +24,17 @@ class User {
     this.password,
   );
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-      json["firstName"], json["lastName"], json["email"], json["password"]);
+  factory User.fromJson(Map<String, dynamic> json) => User.withId(
+      int.parse(json['idUser']),
+      json["firstName"],
+      json["lastName"],
+      json["email"],
+      json["password"]);
 
   // Metodă pentru a converti un obiect User într-un JSON
   Map<String, dynamic> toJson() {
     return {
+      'idUser': this.idUser.toString(),
       'firstName': this.firstName.toString(),
       'lastName': this.lastName.toString(),
       'email': this.email.toString(),

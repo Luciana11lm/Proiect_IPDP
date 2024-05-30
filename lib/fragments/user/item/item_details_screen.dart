@@ -23,17 +23,24 @@ class ItemDetailsScreen extends StatefulWidget {
 
 class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   final itemDetailsController = Get.put(ItemDetailsController());
-  final currentOnlineUser = Get.put(CurrentUser());
+  final _currentOnlineUser = Get.put(CurrentUser());
   DateTime currentDateTime = DateTime.now();
 
+  //---------------------------------------------------------------
+  //                        Methods
+  //---------------------------------------------------------------
+
+  // add products to cart method
   addItemToCart() async {
+    String userId = _currentOnlineUser.user.idUser.toString();
     try {
+      print("Current user ID: ${userId}");
       var res = await http.post(
         Uri.parse(API.addToCart),
         body: {
           "idProduct": widget.itemInfo!.idProduct.toString(),
           "idRestaurant": widget.itemInfo!.idRestaurant.toString(),
-          "idUser": currentOnlineUser.user.idUser.toString(),
+          "idUser": userId,
           "quantity": itemDetailsController.quantity.toString(),
           "sizeCart": widget.itemInfo!.sizes![itemDetailsController.size],
         },
@@ -52,73 +59,17 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     }
   }
 
-/*
-  addOrder() async {
-    try {
-      var res = await http.post(
-        Uri.parse(API.addToCart),
-        body: {
-          "idUser": currentOnlineUser.user.idUser.toString(),
-          "idRestaurant": widget.itemInfo!.idRestaurant.toString(),
-          "orderDateTime": currentDateTime.toString() ,
-          "bookingDateTime": ,
-          "numberOfPeople": ,
-        },
-      );
-      //daca am comunicat corect cu serverul raspunsul este 200 - s-a realizat conexiunea
-      if (res.statusCode == 200) {
-        var resBodyOfAddCart = jsonDecode(res.body);
-        if (resBodyOfAddCart['success']) {
-          Fluttertoast.showToast(msg: "Product added to cart successfully");
-        } else {
-          Fluttertoast.showToast(msg: "Product couldn't be added to cart.");
-        }
-      }
-    } catch (errorMsg) {
-      print("Error :: " + errorMsg.toString());
-    }
-  }
+  //---------------------------------------------------------------
+  //                         Widgets for UI
+  //---------------------------------------------------------------
 
-  addOrderDetails() async {
-     try {
-      var res = await http.post(
-        Uri.parse(API.addOrderDetails),
-        body: {
-          "idProduct": widget.itemInfo!.idProduct.toString(),
-          "idOrder": ,
-          "quantity": itemDetailsController.quantity.toString(),
-          "size": widget.itemInfo!.sizes![itemDetailsController.size],
-        },
-      );
-      //daca am comunicat corect cu serverul raspunsul este 200 - s-a realizat conexiunea
-      if (res.statusCode == 200) {
-        var resBodyOfLogIn = jsonDecode(res.body);
-        if (resBodyOfLogIn['success']) {
-          Fluttertoast.showToast(msg: "Logged in successfully.");
-          User userInfo = User.fromJson(resBodyOfLogIn["userData"]);
-          //se salveaza informatiile utilizatorului in local storage cu SharedPreferences
-          await RememberUserPrefs.storeUserInfo(userInfo);
-          Future.delayed(const Duration(microseconds: 2000), () {
-            Get.to(() => DashboardOfFragments());
-          });
-        } else {
-          Fluttertoast.showToast(msg: "Incorrect credentials.");
-        }
-      }
-    } catch (errorMsg) {
-      print("Error :: " + errorMsg.toString());
-    }
-  }
-
-  
-  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // item image
+          // product's image
           FadeInImage(
             height: MediaQuery.of(context).size.height * 0.45,
             width: MediaQuery.of(context).size.width,
@@ -132,7 +83,27 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
             },
           ),
 
-          // item information
+          // go back button
+          Positioned(
+            top: 45,
+            left: 5,
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.orangeAccent.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(60),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                color: Colors.white,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ),
+
+          // product's information
           Align(
             alignment: Alignment.bottomCenter,
             child: itemInfoWidget(),
@@ -142,6 +113,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     );
   }
 
+  // widget to display product's information
   Widget itemInfoWidget() {
     return Container(
       height: MediaQuery.of(Get.context!).size.height * 0.6,
@@ -200,10 +172,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // description
-
-                // price
-
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,8 +179,9 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       // item rating + rating number
                       Row(
                         children: [
+                          //rating starts
                           RatingBar.builder(
-                            initialRating: widget.itemInfo!.rating!,
+                            initialRating: widget.itemInfo!.rating! * 0.5,
                             minRating: 1,
                             direction: Axis.horizontal,
                             allowHalfRating: true,
@@ -223,14 +192,14 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                             ),
                             onRatingUpdate: (updateRating) {},
                             ignoreGestures: true,
-                            unratedColor: Colors.white,
+                            unratedColor: Color.fromARGB(255, 203, 201, 200),
                             itemSize: 18,
                           ),
 
-                          //rating number
                           const SizedBox(
                             height: 8,
                           ),
+                          //rating number
                           Text(
                             "(${widget.itemInfo!.rating!})",
                             style: const TextStyle(
@@ -242,25 +211,31 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      // tags
-                      Text(
-                        "Tags: ${widget.itemInfo!.tags!.toString().replaceAll("[", "").replaceAll("]", "")}",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
 
                       // description
                       Text(
                         "Description: ${widget.itemInfo!.description}",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.grey),
+                        style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w400),
+                      ),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      // ingredients
+                      Text(
+                        "Ingredients: ${widget.itemInfo!.ingredients.toString().replaceAll("[", "").replaceAll("]", "")}",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w300),
                       ),
 
                       const SizedBox(
@@ -269,16 +244,19 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
                       // price
                       Text(
-                        "${widget.itemInfo!.price}\$",
+                        "Price: ${widget.itemInfo!.price}\$",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                // item counter
+                // item counter for quantity
                 Obx(
                   () => Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -333,6 +311,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
               height: 10,
             ),
 
+            // widget for size selection
             Wrap(
               runSpacing: 8,
               spacing: 8,
@@ -344,8 +323,9 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     },
                     child: Container(
                       height: 35,
-                      width: 60,
+                      width: 75,
                       decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(60),
                         border: Border.all(
                           width: 1,
                           color: itemDetailsController.size == index
@@ -376,22 +356,24 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
             ),
 
             // add to cart button
-            Material(
-              elevation: 5,
-              color: Colors.orange,
-              borderRadius: BorderRadius.circular(60),
-              child: InkWell(
-                onTap: () {
-                  addItemToCart();
-                },
+            Center(
+              child: Material(
+                elevation: 5,
+                color: Colors.orange,
                 borderRadius: BorderRadius.circular(60),
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 50,
-                  width: 150,
-                  child: const Text(
-                    "Add to cart",
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                child: InkWell(
+                  onTap: () {
+                    addItemToCart();
+                  },
+                  borderRadius: BorderRadius.circular(60),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 50,
+                    width: 150,
+                    child: const Text(
+                      "Add to cart",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
                   ),
                 ),
               ),

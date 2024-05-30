@@ -12,7 +12,6 @@ import 'package:menu_app/repositories/userPreferences/user_preferences.dart';
 import 'package:menu_app/screens/auth/sign_in_restaurant.dart';
 import 'package:menu_app/screens/auth/sign_up_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../components/my_text_field.dart';
 import 'package:http/http.dart' as http;
 
 class SignInScreen extends StatefulWidget {
@@ -136,14 +135,14 @@ class _SignInScreenState extends State<SignInScreen> {
                                   ),
                                 ],
                               ),
-                              child: MyTextField(
+                              child: TextFormField(
                                 controller: emailController,
-                                hintText: 'Email',
+                                decoration: const InputDecoration(
+                                  hintText: 'Email',
+                                  prefixIcon: Icon(CupertinoIcons.mail_solid),
+                                ),
                                 obscureText: false,
                                 keyboardType: TextInputType.emailAddress,
-                                prefixIcon:
-                                    const Icon(CupertinoIcons.mail_solid),
-                                errorMsg: _errorMsg,
                                 validator: (val) {
                                   if (val!.isEmpty) {
                                     return '     Please fill in this field';
@@ -174,14 +173,26 @@ class _SignInScreenState extends State<SignInScreen> {
                                   ),
                                 ],
                               ),
-                              child: MyTextField(
+                              child: TextFormField(
                                 controller: passwordController,
-                                hintText: 'Password',
+                                decoration: InputDecoration(
+                                  hintText: 'Password',
+                                  prefixIcon:
+                                      const Icon(CupertinoIcons.lock_fill),
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        obscurePassword = !obscurePassword;
+                                        iconPassword = obscurePassword
+                                            ? CupertinoIcons.eye_fill
+                                            : CupertinoIcons.eye_slash_fill;
+                                      });
+                                    },
+                                    icon: Icon(iconPassword),
+                                  ),
+                                ),
                                 obscureText: obscurePassword,
                                 keyboardType: TextInputType.visiblePassword,
-                                prefixIcon:
-                                    const Icon(CupertinoIcons.lock_fill),
-                                errorMsg: _errorMsg,
                                 validator: (val) {
                                   if (val!.isEmpty) {
                                     return '     Please fill in this field';
@@ -192,20 +203,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                   }
                                   return null;
                                 },
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      obscurePassword = !obscurePassword;
-                                      if (obscurePassword) {
-                                        iconPassword = CupertinoIcons.eye_fill;
-                                      } else {
-                                        iconPassword =
-                                            CupertinoIcons.eye_slash_fill;
-                                      }
-                                    });
-                                  },
-                                  icon: Icon(iconPassword),
-                                ),
                               ),
                             ),
                           ),

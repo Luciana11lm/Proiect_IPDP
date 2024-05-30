@@ -17,13 +17,13 @@ class CartListController extends GetxController {
     _cartlist.value = list;
   }
 
-  addSelectedItem(int itemSelectedID) {
-    _selectedItemList.value.add(itemSelectedID);
+  addSelectedItem(int selectedItemCartID) {
+    _selectedItemList.value.add(selectedItemCartID);
     update();
   }
 
-  deleteSelectedItem(int itemSelectedID) {
-    _selectedItemList.value.remove(itemSelectedID);
+  deleteSelectedItem(int itemSelectedItemCartID) {
+    _selectedItemList.value.remove(itemSelectedItemCartID);
     update();
   }
 

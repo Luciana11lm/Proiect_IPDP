@@ -8,7 +8,6 @@ import 'package:menu_app/repositories/models/restaurant.dart';
 import 'package:menu_app/repositories/restaurantPreferences/restaurant_preferences.dart';
 import 'package:menu_app/fragments/admin/admin_upload_items.dart';
 import 'package:menu_app/screens/auth/sign_in_screen.dart';
-import '../../components/my_text_field.dart';
 import 'package:http/http.dart' as http;
 
 class SignInRestaurant extends StatefulWidget {
@@ -119,14 +118,14 @@ class _SignInRestaurantState extends State<SignInRestaurant> {
                                   ),
                                 ],
                               ),
-                              child: MyTextField(
+                              child: TextFormField(
                                 controller: idRestaurantController,
-                                hintText: 'Restaurant Unic Identifier',
+                                decoration: const InputDecoration(
+                                  hintText: 'Restaurant Unic Identifier',
+                                  prefixIcon: Icon(CupertinoIcons.lock_fill),
+                                ),
                                 obscureText: false,
                                 keyboardType: TextInputType.number,
-                                prefixIcon:
-                                    const Icon(CupertinoIcons.lock_fill),
-                                errorMsg: _errorMsg,
                                 validator: (val) {
                                   if (val!.isEmpty) {
                                     return '     Please fill in this field';
@@ -146,50 +145,47 @@ class _SignInRestaurantState extends State<SignInRestaurant> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.3),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: MyTextField(
-                                controller: passwordRestaurantController,
-                                hintText: 'Password',
-                                obscureText: obscurePassword,
-                                keyboardType: TextInputType.visiblePassword,
-                                prefixIcon:
-                                    const Icon(CupertinoIcons.lock_fill),
-                                errorMsg: _errorMsg,
-                                validator: (val) {
-                                  if (val!.isEmpty) {
-                                    return '     Please fill in this field';
-                                  } else if (!RegExp(
-                                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
-                                      .hasMatch(val)) {
-                                    return '     Please enter a valid password';
-                                  }
-                                  return null;
-                                },
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      obscurePassword = !obscurePassword;
-                                      if (obscurePassword) {
-                                        iconPassword = CupertinoIcons.eye_fill;
-                                      } else {
-                                        iconPassword =
-                                            CupertinoIcons.eye_slash_fill;
-                                      }
-                                    });
-                                  },
-                                  icon: Icon(iconPassword),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ),
+                                child: TextFormField(
+                                  controller: passwordRestaurantController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Password',
+                                    prefixIcon:
+                                        const Icon(CupertinoIcons.lock_fill),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          obscurePassword = !obscurePassword;
+                                          iconPassword = obscurePassword
+                                              ? CupertinoIcons.eye_fill
+                                              : CupertinoIcons.eye_slash_fill;
+                                        });
+                                      },
+                                      icon: Icon(iconPassword),
+                                    ),
+                                  ),
+                                  obscureText: obscurePassword,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  validator: (val) {
+                                    if (val!.isEmpty) {
+                                      return '     Please fill in this field';
+                                    } else if (!RegExp(
+                                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
+                                        .hasMatch(val)) {
+                                      return '     Please enter a valid password';
+                                    }
+                                    return null;
+                                  },
+                                )),
                           ),
                         ),
                         const SizedBox(height: 20),

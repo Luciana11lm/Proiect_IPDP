@@ -1,7 +1,7 @@
 class API {
   static const hostConnect = "http://192.168.22.130/api_menu";
   static const hostConnectUser = "$hostConnect/user";
-  static const hostUploadItem = "$hostConnect/items";
+  static const hostItem = "$hostConnect/items";
   static const hostProducts = "$hostConnect/products";
   static const hostRestaurant = "$hostConnect/restaurant";
   static const hostCart = "$hostConnect/cart";
@@ -13,7 +13,7 @@ class API {
   static const validateEmail = "$hostConnectUser/validate_email.php";
 
   //save new products to database
-  static const uploadNewItem = "$hostUploadItem/upload.php";
+  static const uploadNewItem = "$hostItem/upload.php";
 
   // get trending products
   static const getTrendingMostPopularProducts = "$hostProducts/trending.php";
@@ -28,4 +28,16 @@ class API {
   static const addToCart = "$hostCart/add.php";
   static const getCartList = "$hostCart/read.php";
   static const addOrderDetails = "$hostCart/add_order_details.php";
+
+  //delete items form cart
+  static const deleteSelectedItemsFromCartList = "$hostCart/delete.php";
+
+  //update quantity in cart
+  static const updateItemInCartList = "$hostCart/update.php";
+
+  //get restaurants
+  static const restaurantsList = "$hostRestaurant/get_restaurants.php";
+
+  //search products/restaurants
+  static const searchItems = "$hostItem/serach.php";
 }
