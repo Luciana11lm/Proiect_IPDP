@@ -1,10 +1,64 @@
+import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:menu_app/api_connection/api_connection.dart';
+import 'package:menu_app/fragments/user/dashboard_of_fragments.dart';
 import 'package:menu_app/fragments/user/home_fragment_screen.dart';
+import 'package:http/http.dart' as http;
+import 'package:menu_app/fragments/user/profile_fragment_screen.dart';
+import 'package:menu_app/repositories/models/order.dart';
+import 'package:menu_app/repositories/userPreferences/current_user.dart';
 
-class OrderConfirmationScreen extends StatelessWidget {
-  const OrderConfirmationScreen();
+class OrderConfirmationScreen extends StatefulWidget {
+  OrderConfirmationScreen({Key? key}) : super(key: key);
+
+  @override
+  _OrderConfirmationScreenState createState() =>
+      _OrderConfirmationScreenState();
+}
+
+class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
+  CurrentUser currentUser = Get.put(CurrentUser());
+  Orders? recentOrderInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    getRecentOrderInformation();
+  }
+
+  int index = 0;
+
+  void getRecentOrderInformation() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.getRecentOrder),
+        body: {
+          "idUser": currentUser.user.idUser.toString(),
+        },
+      );
+
+      if (res.statusCode == 200) {
+        var resBodyOfRecentOrderDetails = jsonDecode(res.body);
+        if (resBodyOfRecentOrderDetails['success']) {
+          setState(() {
+            recentOrderInfo =
+                Orders.fromJson(resBodyOfRecentOrderDetails["orderData"]);
+          });
+        } else {
+          Fluttertoast.showToast(msg: "Not found.");
+        }
+      } else {
+        print("Problema pe undeva ");
+      }
+    } catch (errorMsg) {
+      print("Error :: " + errorMsg.toString());
+    }
+  }
 
   final LinearGradient gradient = const LinearGradient(
     colors: [Color(0xfffb8500), Colors.white],
@@ -15,6 +69,13 @@ class OrderConfirmationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formattedDate = recentOrderInfo != null
+        ? DateFormat('d MMMM yyyy').format(recentOrderInfo!.orderDateTime!)
+        : '';
+    String formattedTime = recentOrderInfo != null
+        ? DateFormat('HH:mm').format(recentOrderInfo!.bookingDateTime!)
+        : '';
+
     return Container(
       decoration: BoxDecoration(
         gradient: gradient,
@@ -58,9 +119,13 @@ class OrderConfirmationScreen extends StatelessWidget {
                 const SizedBox(
                   height: 15,
                 ),
-                const Align(
+                Align(
+                  alignment: Alignment.center,
                   child: Text(
-                    'You have booked a tabel for , on ',
+                    recentOrderInfo != null
+                        ? 'You have booked a table for ${recentOrderInfo!.numberOfPeople}, \n on ${formattedDate} at ${formattedTime}.'
+                        : 'Loading...',
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 13,
@@ -78,7 +143,10 @@ class OrderConfirmationScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30),
                     child: InkWell(
                       onTap: () {
-                        Get.to(() => HomeFragmentScreen());
+                        while (index < 3) {
+                          Navigator.pop(context);
+                          index++;
+                        }
                       },
                       borderRadius: BorderRadius.circular(30),
                       child: const Padding(

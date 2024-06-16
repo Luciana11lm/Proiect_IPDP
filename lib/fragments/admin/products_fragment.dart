@@ -19,7 +19,7 @@ class ProductsFragmentScreen extends StatefulWidget {
 }
 
 class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
-  final CurrentRestaurant _currentRestaurant = Get.put(CurrentRestaurant());
+  final CurrentRestaurant currentRestaurant = Get.put(CurrentRestaurant());
   final ImagePicker _picker = ImagePicker();
   XFile? pickedImageXFile;
   var formKey = GlobalKey<FormState>();
@@ -32,17 +32,21 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
   var imageLink = "";
 
   // functie pentru a lua produsele restaurantului curent din baza de date si a le afisa
-  Future<List<Product>> getRestaurantProducts(String idRestaurant) async {
+  Future<List<Product>> getRestaurantProducts() async {
     List<Product> restaurantProductsList = [];
 
     try {
+      print('${currentRestaurant.restaurant.idRestaurant.toString()}');
       var res = await http.post(
         Uri.parse(API.getRestaurantProductsList),
-        body: {'idRestaurant': idRestaurant},
+        body: {
+          'idRestaurant': currentRestaurant.restaurant.idRestaurant.toString()
+        },
       );
       if (res.statusCode == 200) {
-        print("Response: ${res.body}");
         var responseBodyOfProducts = jsonDecode(res.body);
+        print("Response body: ${res.body}");
+
         if (responseBodyOfProducts["success"]) {
           (responseBodyOfProducts["itemsData"] as List).forEach((eachRecord) {
             restaurantProductsList.add(Product.fromJson(eachRecord));
@@ -56,7 +60,7 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
     } catch (errorMsg) {
       print("Error:: " + errorMsg.toString());
     }
-
+    print('restaurantProductsList: ${restaurantProductsList}');
     return restaurantProductsList;
   }
 
@@ -165,7 +169,7 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
           'imageUrl': imageLink.toString(),
           'rating': ratingController.text.trim().toString(),
           'tags': tagsList.toString(),
-          'idRestaurant': _currentRestaurant.restaurant.idRestaurant.toString(),
+          'idRestaurant': currentRestaurant.restaurant.idRestaurant.toString(),
         },
       );
 
@@ -593,11 +597,13 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
 
   Widget defaultScreen(context) {
     return FutureBuilder<List<Product>>(
-      future: getRestaurantProducts(
-          _currentRestaurant.restaurant.idRestaurant.toString()),
+      future: getRestaurantProducts(),
       builder: (context, AsyncSnapshot<List<Product>> dataSnapShot) {
         if (dataSnapShot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: CircularProgressIndicator(
+            strokeWidth: 1,
+          ));
         }
         if (dataSnapShot.hasError) {
           return const Center(child: Text("An error occurred"));
@@ -605,97 +611,110 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
         if (dataSnapShot.data == null) {
           return const Center(child: Text("No items found"));
         }
-        if (dataSnapShot.data!.isNotEmpty) {
+        print('${dataSnapShot.data!.length}');
+        if (dataSnapShot.data!.length > 0) {
           return Scaffold(
             backgroundColor: Colors.white,
-            body: Stack(
+            body: Column(
               children: [
-                ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 80),
-                  itemCount: dataSnapShot.data!.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    Product eachProductData = dataSnapShot.data![index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: ListTile(
-                        leading: ClipRRect(
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(bottom: 80),
+                    itemCount: dataSnapShot.data!.length,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      Product eachProductData = dataSnapShot.data![index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
-                          child: FadeInImage(
-                            height: 50,
-                            width: 50,
-                            fit: BoxFit.cover,
-                            placeholder: const AssetImage('assets/Menu.png'),
-                            image: NetworkImage(eachProductData.imageUrl!),
-                            imageErrorBuilder:
-                                (context, error, stackTraceError) {
-                              return const Center(
-                                child: Icon(Icons.broken_image_outlined),
-                              );
-                            },
+                        ),
+                        child: ListTile(
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: FadeInImage(
+                              height: 50,
+                              width: 50,
+                              fit: BoxFit.cover,
+                              placeholder: const AssetImage('assets/Menu.png'),
+                              image: NetworkImage(eachProductData.imageUrl!),
+                              imageErrorBuilder:
+                                  (context, error, stackTraceError) {
+                                return const Center(
+                                  child: Icon(Icons.broken_image_outlined),
+                                );
+                              },
+                            ),
+                          ),
+                          title: Text(
+                            eachProductData.name.toString(),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            eachProductData.description.toString(),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          trailing: Text(
+                            '${eachProductData.price?.toStringAsFixed(2)}\$',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange,
+                            ),
                           ),
                         ),
-                        title: Text(
-                          eachProductData.name.toString(),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        subtitle: Text(
-                          eachProductData.description.toString(),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        trailing: Text(
-                          eachProductData.price.toString(),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.orange,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
                 Positioned(
                   bottom: 20,
                   left: 20,
                   right: 20,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      showDialogBoxForImagePickingAndCapturing();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(FontAwesomeIcons.plus),
-                        SizedBox(width: 10),
-                        Text(
-                          'Add a New Product',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  child: SizedBox(
+                    width: 250,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showDialogBoxForImagePickingAndCapturing();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                      ],
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.plus,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Add a New Product',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                )
               ],
             ),
           );

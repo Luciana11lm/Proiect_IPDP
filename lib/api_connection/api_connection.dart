@@ -45,4 +45,11 @@ class API {
 
   //place order into database
   static const saveOrder = "$hostOrder/add.php";
+  static const getRecentOrder = "$hostOrder/get_recent_order.php";
+  static const readOrders = "$hostOrder/get_user_orders.php";
+  static const setNewStatusOfOrder = "$hostOrder/set_status.php";
+
+  //get orders for restaurant
+  static const getOrdersRestaurantList =
+      "$hostRestaurant/get_orders_restaurant.php";
 }

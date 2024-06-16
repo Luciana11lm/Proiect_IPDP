@@ -98,7 +98,29 @@ class OrderNowScreen extends StatelessWidget {
     );
   }
 
-  saveNewOrderInfo() async {
+  deleteSelectedItemsFromUserCartList(int cartId) async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.deleteSelectedItemsFromCartList),
+        body: {
+          "idCart": cartId.toString(),
+        },
+      );
+      if (res.statusCode == 200) {
+        var responseBodyFromDeleteCart = jsonDecode(res.body);
+        if (responseBodyFromDeleteCart["success"] == true) {
+          Fluttertoast.showToast(
+              msg: 'Your new order has been placed successfully!');
+        }
+      } else {
+        Fluttertoast.showToast(msg: "Error: status Code is not 200");
+      }
+    } catch (errorMsg) {
+      print("Error: " + errorMsg.toString());
+    }
+  }
+
+  saveNewOrderInfo(BuildContext context) async {
     String selectedItmesString = selectedCartListItemsInfo!
         .map((eachSelectedItem) => jsonEncode(eachSelectedItem))
         .toList()
@@ -123,10 +145,14 @@ class OrderNowScreen extends StatelessWidget {
       if (res.statusCode == 200) {
         var resBodyOfAddNewOrder = jsonDecode(res.body);
         if (resBodyOfAddNewOrder["success"] == true) {
-          Fluttertoast.showToast(msg: 'Order placed');
-          Get.to(() => OrderConfirmationScreen());
-
-          // delete selected items from cart
+          // delete ordered items from cart
+          selectedCartIDs!.forEach((eachSelectedItemCartId) {
+            deleteSelectedItemsFromUserCartList(eachSelectedItemCartId);
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => OrderConfirmationScreen()),
+          );
         } else {
           Fluttertoast.showToast(msg: 'Order not placed');
         }
@@ -456,7 +482,7 @@ class OrderNowScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               child: InkWell(
                 onTap: () {
-                  saveNewOrderInfo();
+                  saveNewOrderInfo(context);
                 },
                 borderRadius: BorderRadius.circular(30),
                 child: Padding(

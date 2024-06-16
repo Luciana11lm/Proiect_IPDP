@@ -4,9 +4,10 @@ include '../connection.php';
 
   $typedKeyWords = $_POST['typedKeyWords'];
 
-  $sqlQuery = "SELECT * FROM Product WHERE name LIKE '%$typedKeyWords%' OR tags LIKE '%$typedKeyWords%'";
+  $sqlQuery = "SELECT * FROM Product WHERE Product.name LIKE '%$typedKeyWords%'";
 
   error_log("Received data: typedKeyWords=$typedKeyWords");
+  
   $resultOfQuery = $connectNow->query($sqlQuery); 
 
   if($resultOfQuery->num_rows > 0) { 

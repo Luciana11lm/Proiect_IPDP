@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:menu_app/fragments/user/dashboard_of_fragments.dart';
+import 'package:menu_app/fragments/user/home_fragment_screen.dart';
 import 'package:menu_app/repositories/userPreferences/user_preferences.dart';
 import 'package:menu_app/screens/onbording/views/onbording.dart';
 import 'package:menu_app/test/test_database_connection.dart';

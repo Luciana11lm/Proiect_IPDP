@@ -573,13 +573,23 @@ class _CartListScreenState extends State<CartListScreen> {
                   child: InkWell(
                       onTap: () {
                         cartListController.selectedItemList.length > 0
-                            ? Get.to(
+                            ? /*Get.to(
                                 OrderNowScreen(
                                     selectedCartListItemsInfo:
                                         getSelectedCartListItemsInformation(),
                                     totalAmount: cartListController.total,
                                     selectedCartIDs:
                                         cartListController.selectedItemList),
+                              )*/
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderNowScreen(
+                                        selectedCartListItemsInfo:
+                                            getSelectedCartListItemsInformation(),
+                                        totalAmount: cartListController.total,
+                                        selectedCartIDs: cartListController
+                                            .selectedItemList)),
                               )
                             : null;
                       },

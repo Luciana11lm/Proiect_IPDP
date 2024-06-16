@@ -1,9 +1,10 @@
 <?php
-  include '../connection.php';
 
-  $idRestaurant = $_POST['idRestaurant'];
+include '../connection.php';
 
-  $sqlQuery = "SELECT * FROM Product WHERE idRestaurant = '$idRestaurant'";
+  $idUser = $_POST['idUser'];
+
+  $sqlQuery = "SELECT * FROM `Orders` WHERE idUser = '$idUser' AND orderDateTime = (SELECT MAX(orderDateTime) FROM orders)";
   $resultOfQuery = $connectNow->query($sqlQuery);
 
   if($resultOfQuery->num_rows > 0)
@@ -13,7 +14,7 @@
       $itemsRecord[] = $rowFound;
     }
     echo json_encode(array("success"=>true,
-                           "itemsData"=>$itemsRecord,
+                           "orderData"=>$itemsRecord[0],
                           )); 
    } else { 
     echo json_encode(array("success"=>false));

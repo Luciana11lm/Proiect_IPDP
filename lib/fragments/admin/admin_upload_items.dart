@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:menu_app/custom_widgets/custom_nav_bar.dart';
 import 'package:menu_app/fragments/admin/admin_orders_fragment.dart';
 import 'package:menu_app/fragments/admin/admin_profile_fragment.dart';
 import 'package:menu_app/fragments/admin/products_fragment.dart';
@@ -51,41 +52,19 @@ class AdminUploadItems extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: Obx(
-            () => Container(
-              margin: const EdgeInsets.only(bottom: 20, left: 12, right: 12),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 22, 15, 6),
-                borderRadius: BorderRadius.circular(60),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 10,
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(60),
-                child: BottomNavigationBar(
-                  backgroundColor: Colors.orange,
-                  currentIndex: _indexNumber.value,
-                  onTap: (value) {
-                    _indexNumber.value = value;
-                  },
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  selectedItemColor: Colors.white,
-                  unselectedItemColor: Colors.white54,
-                  items: List.generate(3, (index) {
-                    var navBtnProperty = _navigationButtonsProperties[index];
-                    return BottomNavigationBarItem(
-                      backgroundColor: const Color.fromARGB(255, 201, 115, 30),
-                      icon: Icon(navBtnProperty["non_active_icon"]),
-                      activeIcon: Icon(navBtnProperty["active_icon"]),
-                      label: navBtnProperty["label"],
-                    );
-                  }),
-                ),
-              ),
+            () => CustomBottomNavigationBar(
+              currentIndex: _indexNumber.value,
+              onTap: (value) {
+                _indexNumber.value = value;
+              },
+              items: List.generate(3, (index) {
+                var navBtnProperty = _navigationButtonsProperties[index];
+                return {
+                  "non_active_icon": navBtnProperty["non_active_icon"],
+                  "active_icon": navBtnProperty["active_icon"],
+                  "label": navBtnProperty["label"],
+                };
+              }),
             ),
           ),
         );

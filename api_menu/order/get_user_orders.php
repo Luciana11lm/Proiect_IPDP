@@ -1,19 +1,20 @@
 <?php
-  include '../connection.php';
 
-  $idRestaurant = $_POST['idRestaurant'];
+include '../connection.php';
 
-  $sqlQuery = "SELECT * FROM Product WHERE idRestaurant = '$idRestaurant'";
+  $idUser = $_POST['idUser'];
+
+  $sqlQuery = "SELECT * FROM `Orders` WHERE idUser = '$idUser' ORDER BY orderDateTime DESC";
   $resultOfQuery = $connectNow->query($sqlQuery);
 
   if($resultOfQuery->num_rows > 0)
    { 
-    $itemsRecord = array();
+    $orderRecord = array();
     while($rowFound = $resultOfQuery->fetch_assoc()){ 
-      $itemsRecord[] = $rowFound;
+      $orderRecord[] = $rowFound;
     }
     echo json_encode(array("success"=>true,
-                           "itemsData"=>$itemsRecord,
+                           "orderData"=>$orderRecord,
                           )); 
    } else { 
     echo json_encode(array("success"=>false));

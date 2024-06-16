@@ -22,17 +22,33 @@ class Orders {
     this.status,
   });
 
+  Orders.WithId({
+    this.idOrder,
+    this.idUser,
+    this.idRestaurant,
+    this.selectedItmes,
+    this.orderDateTime,
+    this.bookingDateTime,
+    this.numberOfPeople,
+    this.totalPrice,
+    this.status,
+  });
+
 // Method to create an Order object from JSON
   factory Orders.fromJson(Map<String, dynamic> json) {
-    return Orders(
-      //idOrder: json['idOrder'],
-      idUser: json['idUser'],
-      idRestaurant: json['idRestaurant'],
-      //selectedItmes:
+    return Orders.WithId(
+      idOrder: int.parse(json['idOrder']),
+      idUser: int.parse(json['idUser']),
+      idRestaurant: int.parse(json['idRestaurant']),
+      selectedItmes: json['selectedItmes'],
       orderDateTime: DateTime.parse(json['orderDateTime']),
       bookingDateTime: DateTime.parse(json['bookingDateTime']),
-      numberOfPeople: json['numberOfPeople'],
-      totalPrice: (json['totalPrice'] as num?)?.toDouble(),
+      numberOfPeople: int.parse(json['numberOfPeople']),
+      totalPrice: json['totalPrice'] != null
+          ? (json['totalPrice'] is String
+              ? double.parse(json['totalPrice'])
+              : (json['totalPrice'] as num).toDouble())
+          : null,
     );
   }
 

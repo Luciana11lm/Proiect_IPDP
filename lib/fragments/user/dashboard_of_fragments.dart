@@ -65,52 +65,6 @@ class DashboardOfFragments extends StatelessWidget {
                 };
               }),
             ),
-            /*Container(
-              margin: const EdgeInsets.only(bottom: 20, left: 12, right: 12),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 22, 15, 6),
-                borderRadius: BorderRadius.circular(60),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 10,
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(60),
-                child: BottomNavigationBar(
-                  backgroundColor: Colors.orange,
-                  currentIndex: _indexNumber.value,
-                  onTap: (value) {
-                    _indexNumber.value = value;
-                  },
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  selectedItemColor: Colors.white,
-                  unselectedItemColor: Colors.white54,
-                  items: List.generate(3, (index) {
-                    var navBtnProperty = _navigationButtonsProperties[index];
-                    return BottomNavigationBarItem(
-                      backgroundColor: const Color.fromARGB(255, 201, 115, 30),
-                      icon: Transform.translate(
-                        offset: const Offset(0, 20),
-                        child: Icon(
-                          navBtnProperty["non_active_icon"],
-                        ),
-                      ),
-                      activeIcon: Transform.translate(
-                        offset: const Offset(0, 20),
-                        child: Icon(
-                          navBtnProperty["active_icon"],
-                        ),
-                      ),
-                      label: (navBtnProperty["label"]),
-                    );
-                  }),
-                ),
-              ),
-            ),*/
           ),
         );
       },

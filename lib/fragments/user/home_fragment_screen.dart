@@ -125,7 +125,12 @@ class HomeFragmentScreen extends StatelessWidget {
                     icon: const Icon(Icons.shopping_cart),
                     color: Colors.orange,
                     onPressed: () {
-                      Get.to(CartListScreen());
+                      // Get.to(CartListScreen());
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CartListScreen()),
+                      );
                     },
                   ),
                 ),
