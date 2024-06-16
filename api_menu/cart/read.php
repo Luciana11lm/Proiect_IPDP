@@ -3,7 +3,9 @@
 
   $currentOnlineUserID = $_POST["currentOnlineUserID"];
 
-  $sqlQuery = "SELECT * FROM Cart CROSS JOIN Product WHERE Cart.idUser = '$currentOnlineUserID' AND Cart.idProduct = Product.isProduct";
+  $sqlQuery = "SELECT * FROM Cart CROSS JOIN Product WHERE Cart.idUser = '$currentOnlineUserID' AND Cart.idProduct = Product.idProduct";
+   
+  $resultOfQuery = $connectNow->query($sqlQuery); //if data is inserted successfully result is 1 - no error
 
   if($resultOfQuery->num_rows > 0) { //allow user to log in
     $cartRecord = array();

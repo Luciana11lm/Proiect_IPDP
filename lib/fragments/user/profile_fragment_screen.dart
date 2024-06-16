@@ -1,8 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:menu_app/api_connection/api_connection.dart';
+import 'package:menu_app/fragments/user/item/item_details_screen.dart';
+import 'package:menu_app/repositories/models/product.dart';
 import 'package:menu_app/repositories/userPreferences/current_user.dart';
 import 'package:menu_app/repositories/userPreferences/user_preferences.dart';
 import 'package:menu_app/screens/auth/sign_in_screen.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileFragmentScreen extends StatefulWidget {
   const ProfileFragmentScreen({super.key});
@@ -63,6 +71,29 @@ class _ProfileFragmentScreenState extends State<ProfileFragmentScreen> {
     }
   }
 
+  Future<List<Product>> getTrendingProducts() async {
+    List<Product> trendingProductsList = [];
+
+    try {
+      var res = await http.post(Uri.parse(API.getTrendingMostPopularProducts));
+      if (res.statusCode == 200) {
+        var responseBodyOfTrendingProducts = jsonDecode(res.body);
+        if (responseBodyOfTrendingProducts["success"]) {
+          (responseBodyOfTrendingProducts["itemsData"] as List)
+              .forEach((eachRecord) {
+            trendingProductsList.add(Product.fromJson(eachRecord));
+          });
+        }
+      } else {
+        Fluttertoast.showToast(msg: "Error status code is not 200");
+      }
+    } catch (errorMsg) {
+      print("Error:: " + errorMsg.toString());
+    }
+
+    return trendingProductsList;
+  }
+
   @override
   Widget build(BuildContext context) {
     String firstNameUser = _currentUser.user.firstName;
@@ -118,32 +149,7 @@ class _ProfileFragmentScreenState extends State<ProfileFragmentScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            Container(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 5, // Numărul de rețete favorite
-                itemBuilder: (context, index) {
-                  // Afișați aici fiecare rețetă favorită într-un card sau un alt widget
-                  return Container(
-                    width: 150,
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.grey[200],
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Recipe ${index + 1}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            trendingMostPopularItemWidget(context),
             const SizedBox(
               height: 20,
             ),
@@ -174,6 +180,156 @@ class _ProfileFragmentScreenState extends State<ProfileFragmentScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget trendingMostPopularItemWidget(context) {
+    return FutureBuilder(
+      future: getTrendingProducts(),
+      builder: (context, AsyncSnapshot<List<Product>> dataSnapShot) {
+        if (dataSnapShot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (dataSnapShot.data == null) {
+          return const Center(child: Text("No trending item found"));
+        }
+        if (dataSnapShot.data!.length > 0) {
+          return Container(
+            height: 240,
+            child: ListView.builder(
+              itemCount: dataSnapShot.data!.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                Product eachProductData = dataSnapShot.data![index];
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(() => ItemDetailsScreen(itemInfo: eachProductData));
+                  },
+                  child: Container(
+                    width: 160,
+                    margin: EdgeInsets.fromLTRB(index == 0 ? 16 : 8, 10,
+                        index == dataSnapShot.data!.length - 1 ? 16 : 8, 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(1, 2),
+                          blurRadius: 8,
+                          color: Color.fromARGB(255, 146, 146, 146),
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                          child: FadeInImage(
+                            height: 150,
+                            width: 150,
+                            fit: BoxFit.cover,
+                            placeholder: const AssetImage('assets/Menu.png'),
+                            image: NetworkImage(eachProductData.imageUrl!),
+                            imageErrorBuilder:
+                                (context, error, stackTraceError) {
+                              return const Center(
+                                child: Icon(Icons.broken_image_outlined),
+                              );
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //name and price of the item
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      eachProductData.name!,
+                                      maxLines: 1,
+                                      overflow: TextOverflow
+                                          .ellipsis, //textul extra din titlu e convertit in ...
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 11, 8, 8),
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    eachProductData.price.toString() + "\$",
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 105, 18, 18),
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  // reating stars
+                                  RatingBar.builder(
+                                    initialRating:
+                                        eachProductData.rating! * 0.5,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: true,
+                                    itemCount: 5,
+                                    itemBuilder: (context, c) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (updateRating) {},
+                                    ignoreGestures: true,
+                                    unratedColor:
+                                        Color.fromARGB(255, 206, 205, 205),
+                                    itemSize: 18,
+                                  ),
+
+                                  //rating number
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    "(${eachProductData.rating!})",
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        } else {
+          return const Center(
+            child: Text("Empty, no data "),
+          );
+        }
+      },
     );
   }
 }

@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:menu_app/fragments/user/home_fragment_screen.dart';
 import 'package:menu_app/repositories/models/order.dart';
 
 class OrderFragmentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('My Orders'),
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
       ),
     );
   }

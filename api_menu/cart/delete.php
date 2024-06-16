@@ -4,12 +4,9 @@
   // save/send data = POST
   // get data from mysql database = GET
 
-  $firstName = $_POST['firstName'];
-  $lastName  = $_POST['lastName'];
-  $email     = $_POST['email'];
-  $password  = md5($_POST['password']); //send password in database in binary format for security
-
-  $sqlQuery = "INSERT INTO Users SET firstName = '$firstName', lastName = '$lastName', email = '$email', password = '$password'";
+  $idCart = $_POST['idCart'];
+  
+  $sqlQuery = "DELETE FROM Cart WHERE idCart = '$idCart'";
 
   $resultOfQuery = $connectNow->query($sqlQuery); //if data is inserted successfully result is 1 - no error
 

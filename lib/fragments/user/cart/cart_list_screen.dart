@@ -1,10 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:menu_app/api_connection/api_connection.dart';
 import 'package:menu_app/fragments/user/controllers/cart_list_controller.dart';
+import 'package:menu_app/fragments/user/item/item_details_screen.dart';
+import 'package:menu_app/fragments/user/order/order_now_screen.dart';
 import 'package:menu_app/repositories/models/cart.dart';
 import 'package:menu_app/repositories/models/product.dart';
 import 'package:menu_app/repositories/userPreferences/current_user.dart';
@@ -109,6 +110,79 @@ class _CartListScreenState extends State<CartListScreen> {
     } catch (errorMsg) {
       print("Error: " + errorMsg.toString());
     }
+  }
+
+/*
+  placeOrderNow(List<Map<String, dynamic>>? selectedCartListItemsInfo) async {
+    try {
+      var response = await http.post(
+        Uri.parse(API.placeDetailsOrder),
+        body: {
+          "idUser": selectedCartListItemsInfo?["idUser"].toString();
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var resBodyOfUploadItem = jsonDecode(response.body);
+        if (resBodyOfUploadItem['success']) {
+          Fluttertoast.showToast(msg: "Order in process...");
+          addOrderDetailsToBD(selectedCartListItemsInfo);
+        } else {
+          Fluttertoast.showToast(msg: "Order could not be placed");
+        }
+      }
+    } catch (errorMsg) {
+      print("Error ::" + errorMsg.toString());
+    }
+  }
+
+  addOrderDetailsToBD(
+      List<Map<String, dynamic>>? selectedCartListItemsInfo) async {
+    try {
+      var response = await http.post(
+        Uri.parse(API.placeOrder),
+        body: {},
+      );
+
+      if (response.statusCode == 200) {
+        var resBodyOfUploadItem = jsonDecode(response.body);
+        if (resBodyOfUploadItem['success']) {
+          Fluttertoast.showToast(msg: "Order placed successfully!");
+          addOrderDetailsToBD(selectedCartListItemsInfo);
+        } else {
+          Fluttertoast.showToast(msg: "Order could not be placed");
+        }
+      }
+    } catch (errorMsg) {
+      print("Error ::" + errorMsg.toString());
+    }
+  }
+
+  */
+  List<Map<String, dynamic>> getSelectedCartListItemsInformation() {
+    List<Map<String, dynamic>> selectedCartListItemsInformation = [];
+    if (cartListController.selectedItemList.length > 0) {
+      cartListController.cartList.forEach(
+        (selectedCartListItem) {
+          if (cartListController.selectedItemList
+              .contains(selectedCartListItem.idCart)) {
+            Map<String, dynamic> itemInformation = {
+              "idProduct": selectedCartListItem.idProduct,
+              "name": selectedCartListItem.name,
+              "imageUrl": selectedCartListItem.imageUrl,
+              "price": selectedCartListItem.price!,
+              "idRestaurant": selectedCartListItem.idRestaurant,
+              "quantity": selectedCartListItem.quantity,
+              "size": selectedCartListItem.sizeCart,
+              "totalAmount":
+                  selectedCartListItem.price! * selectedCartListItem.quantity!,
+            };
+            selectedCartListItemsInformation.add(itemInformation);
+          }
+        },
+      );
+    }
+    return selectedCartListItemsInformation;
   }
 
   @override
@@ -263,9 +337,13 @@ class _CartListScreenState extends State<CartListScreen> {
                             );
                           },
                         ),
+                        //product details
                         Expanded(
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(() =>
+                                  ItemDetailsScreen(itemInfo: productModel));
+                            },
                             child: Container(
                               margin: EdgeInsets.fromLTRB(
                                   0,
@@ -493,7 +571,18 @@ class _CartListScreenState extends State<CartListScreen> {
                       : Colors.grey,
                   borderRadius: BorderRadius.circular(60),
                   child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        cartListController.selectedItemList.length > 0
+                            ? Get.to(
+                                OrderNowScreen(
+                                    selectedCartListItemsInfo:
+                                        getSelectedCartListItemsInformation(),
+                                    totalAmount: cartListController.total,
+                                    selectedCartIDs:
+                                        cartListController.selectedItemList),
+                              )
+                            : null;
+                      },
                       child: const Padding(
                         padding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 8),

@@ -32,14 +32,14 @@ class Restaurant {
   // Metodă pentru a converti un obiect Restaurant într-un JSON
   Map<String, dynamic> toJson() {
     return {
-      'idRestaurant': this.idRestaurant.toString(),
-      'name': this.name.toString(),
-      'city': this.city.toString(),
-      'street': this.street.toString(),
-      'description': this.description.toString(),
-      'number': this.number.toString(),
-      'imageRestaurantUrl': this.imageRestaurantUrl.toString(),
-      'passwordRestaurant': this.passwordRestaurant.toString(),
+      'idRestaurant': idRestaurant.toString(),
+      'name': name.toString(),
+      'city': city.toString(),
+      'street': street.toString(),
+      'description': description.toString(),
+      'number': number.toString(),
+      'imageRestaurantUrl': imageRestaurantUrl.toString(),
+      'passwordRestaurant': passwordRestaurant.toString(),
     };
   }
 }

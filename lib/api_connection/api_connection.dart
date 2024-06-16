@@ -1,10 +1,11 @@
 class API {
-  static const hostConnect = "http://192.168.22.130/api_menu";
+  static const hostConnect = "http://192.168.100.45/api_menu"; //80
   static const hostConnectUser = "$hostConnect/user";
   static const hostItem = "$hostConnect/items";
   static const hostProducts = "$hostConnect/products";
   static const hostRestaurant = "$hostConnect/restaurant";
   static const hostCart = "$hostConnect/cart";
+  static const hostOrder = "$hostConnect/order";
 
   //singUp user
   static const signUp =
@@ -22,6 +23,7 @@ class API {
 
   //retaurant login
   static const logInRestaurant = "$hostRestaurant/login_restaurant.php";
+  static const getOneRestaurant = "$hostRestaurant/get_one_restaurant.php";
   // get all products from a restaurant
   static const getRestaurantProductsList = "$hostRestaurant/get_products.php";
   // add orders to database
@@ -40,4 +42,7 @@ class API {
 
   //search products/restaurants
   static const searchItems = "$hostItem/serach.php";
+
+  //place order into database
+  static const saveOrder = "$hostOrder/add.php";
 }

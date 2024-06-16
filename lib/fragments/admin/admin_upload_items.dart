@@ -4,11 +4,7 @@ import 'package:get/get.dart';
 import 'package:menu_app/fragments/admin/admin_orders_fragment.dart';
 import 'package:menu_app/fragments/admin/admin_profile_fragment.dart';
 import 'package:menu_app/fragments/admin/products_fragment.dart';
-import 'package:menu_app/fragments/user/home_fragment_screen.dart';
-import 'package:menu_app/fragments/user/order_fragment_screen.dart';
-import 'package:menu_app/fragments/user/profile_fragment_screen.dart';
 import 'package:menu_app/repositories/restaurantPreferences/current_restaurant.dart';
-import 'package:menu_app/repositories/userPreferences/current_user.dart';
 
 class AdminUploadItems extends StatelessWidget {
   final CurrentRestaurant _rememberCurrentRestaurant =

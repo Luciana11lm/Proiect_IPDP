@@ -14,7 +14,9 @@ class IntroPage3 extends StatelessWidget {
           children: [
             Center(
               child: Lottie.network(
-                'https://lottie.host/59a6d22d-6561-4b34-99ef-89a2aa90a334/bspMm7s9Ku.json',
+                //'https://lottie.host/59a6d22d-6561-4b34-99ef-89a2aa90a334/bspMm7s9Ku.json',
+                //'https://lottie.host/6533bc14-40f4-4940-8fa2-ff6a34895462/A0jSBwj2QX.json',
+                'https://lottie.host/2f7f9cdd-ab2d-45e8-8c43-cc952813d967/buJKNflWVd.json',
                 height: 350,
                 width: 350,
               ),
@@ -41,7 +43,7 @@ class IntroPage3 extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Wait your order and\n enjoy it at home',
+                    'Have your food\n prepared in no time',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,

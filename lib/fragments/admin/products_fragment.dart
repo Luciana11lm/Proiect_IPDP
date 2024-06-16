@@ -611,8 +611,7 @@ class _ProductsFragmentScreenState extends State<ProductsFragmentScreen> {
             body: Stack(
               children: [
                 ListView.builder(
-                  padding: const EdgeInsets.only(
-                      bottom: 80), // Leave space for the button
+                  padding: const EdgeInsets.only(bottom: 80),
                   itemCount: dataSnapShot.data!.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {

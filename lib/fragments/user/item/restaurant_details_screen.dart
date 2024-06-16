@@ -37,7 +37,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
             width: MediaQuery.of(context).size.width,
             fit: BoxFit.cover,
             placeholder: const AssetImage('assets/Menu.png'),
-            image: NetworkImage(widget.itemInfo!.imageRestaurantUrl!),
+            image: AssetImage(
+                'assets/r3.jpeg'), //NetworkImage(widget.itemInfo!.imageRestaurantUrl!),
             imageErrorBuilder: (context, error, stackTraceError) {
               return const Center(
                 child: Icon(Icons.broken_image_outlined),

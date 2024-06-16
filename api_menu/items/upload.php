@@ -8,8 +8,9 @@
   $imageUrl = $_POST['imageUrl'];
   $rating = $_POST['rating'];
   $tags = $_POST['tags'];
+  $idRestaurant = $_POST['idRestaurant'];
 
-  $sqlQuery = "INSERT INTO Product SET name='$name', price='$price', ingredients='$ingredients', description='$description', imageUrl='$imageUrl', rating='$rating', tags='$tags'";
+  $sqlQuery = "INSERT INTO Product SET name='$name', price='$price', ingredients='$ingredients', description='$description', imageUrl='$imageUrl', rating='$rating', tags='$tags', idRestaurant='$idRestaurant'";
 
   $resultOfQuery = $connectNow->query($sqlQuery);
 

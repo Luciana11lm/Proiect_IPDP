@@ -151,10 +151,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.8,
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(60),
+                                  borderRadius: BorderRadius.circular(20),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: const Color(0xfffb8500),
+                                      color: Colors.white,
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.black.withOpacity(0.3),
@@ -175,9 +175,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       keyboardType: TextInputType.name,
                                       validator: (val) {
                                         if (val!.isEmpty) {
-                                          return 'Please fill in this field';
+                                          return '   Please fill in this field';
                                         } else if (val.length > 30) {
-                                          return 'Name too long';
+                                          return '   Name too long';
                                         }
                                         return null;
                                       },
@@ -191,10 +191,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.8,
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(60),
+                                  borderRadius: BorderRadius.circular(20),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: const Color(0xfffb8500),
+                                      color: Colors.white,
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.black.withOpacity(0.3),
@@ -208,16 +208,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         controller: lastNameController,
                                         decoration: const InputDecoration(
                                           hintText: 'Last Name',
-                                          prefixIcon: const Icon(
+                                          prefixIcon: Icon(
                                               CupertinoIcons.person_fill),
                                         ),
                                         obscureText: false,
                                         keyboardType: TextInputType.name,
                                         validator: (val) {
                                           if (val!.isEmpty) {
-                                            return 'Please fill in this field';
+                                            return '   Please fill in this field';
                                           } else if (val.length > 30) {
-                                            return 'Name too long';
+                                            return '   Name too long';
                                           }
                                           return null;
                                         }),
@@ -230,7 +230,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.8,
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(60),
+                                  borderRadius: BorderRadius.circular(20),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -246,7 +246,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         controller: emailController,
                                         decoration: const InputDecoration(
                                           hintText: 'Email',
-                                          prefixIcon: const Icon(
+                                          prefixIcon: Icon(
                                               CupertinoIcons.mail_solid),
                                         ),
                                         obscureText: false,
@@ -254,11 +254,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             TextInputType.emailAddress,
                                         validator: (val) {
                                           if (val!.isEmpty) {
-                                            return 'Please fill in this field';
+                                            return '   Please fill in this field';
                                           } else if (!RegExp(
                                                   r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
                                               .hasMatch(val)) {
-                                            return 'Please enter a valid email';
+                                            return '   Please enter a valid email';
                                           }
                                           return null;
                                         }),
@@ -271,7 +271,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.8,
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(60),
+                                  borderRadius: BorderRadius.circular(20),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -322,11 +322,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       },
                                       validator: (val) {
                                         if (val!.isEmpty) {
-                                          return 'Please fill in this field';
+                                          return '   Please fill in this field';
                                         } else if (!RegExp(
                                                 r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
                                             .hasMatch(val)) {
-                                          return 'Please enter a valid password';
+                                          return '   Please enter a valid password';
                                         }
                                         return null;
                                       },

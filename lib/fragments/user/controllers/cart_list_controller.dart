@@ -4,7 +4,7 @@ import 'package:menu_app/repositories/models/cart.dart';
 class CartListController extends GetxController {
   RxList<Cart> _cartlist = <Cart>[].obs; //user all items in the cart
   RxList<int> _selectedItemList = <int>[]
-      .obs; // user selected items for whcih user want to place final order
+      .obs; // user selected items for which user want to place final order
   RxBool _isSelectedAll = false.obs;
   RxDouble _total = 0.0.obs;
 

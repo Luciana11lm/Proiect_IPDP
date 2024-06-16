@@ -460,9 +460,10 @@ class HomeFragmentScreen extends StatelessWidget {
                             height: 150,
                             width: 150,
                             fit: BoxFit.cover,
-                            placeholder: const AssetImage('assets/Menu.png'),
-                            image: NetworkImage(
-                                eachRestaurantData.imageRestaurantUrl!),
+                            placeholder: const AssetImage('assets/r3.jpeg'),
+                            image: AssetImage('assets/r3.jpeg'),
+                            /*NetworkImage(
+                                eachRestaurantData.imageRestaurantUrl!)*/
                             imageErrorBuilder:
                                 (context, error, stackTraceError) {
                               return const Center(

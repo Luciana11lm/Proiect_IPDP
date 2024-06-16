@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:menu_app/custom_widgets/custom_nav_bar.dart';
 import 'package:menu_app/fragments/user/home_fragment_screen.dart';
 import 'package:menu_app/fragments/user/order_fragment_screen.dart';
 import 'package:menu_app/fragments/user/profile_fragment_screen.dart';
@@ -50,7 +51,21 @@ class DashboardOfFragments extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: Obx(
-            () => Container(
+            () => CustomBottomNavigationBar(
+              currentIndex: _indexNumber.value,
+              onTap: (value) {
+                _indexNumber.value = value;
+              },
+              items: List.generate(3, (index) {
+                var navBtnProperty = _navigationButtonsProperties[index];
+                return {
+                  "non_active_icon": navBtnProperty["non_active_icon"],
+                  "active_icon": navBtnProperty["active_icon"],
+                  "label": navBtnProperty["label"],
+                };
+              }),
+            ),
+            /*Container(
               margin: const EdgeInsets.only(bottom: 20, left: 12, right: 12),
               decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 22, 15, 6),
@@ -78,14 +93,24 @@ class DashboardOfFragments extends StatelessWidget {
                     var navBtnProperty = _navigationButtonsProperties[index];
                     return BottomNavigationBarItem(
                       backgroundColor: const Color.fromARGB(255, 201, 115, 30),
-                      icon: Icon(navBtnProperty["non_active_icon"]),
-                      activeIcon: Icon(navBtnProperty["active_icon"]),
-                      label: navBtnProperty["label"],
+                      icon: Transform.translate(
+                        offset: const Offset(0, 20),
+                        child: Icon(
+                          navBtnProperty["non_active_icon"],
+                        ),
+                      ),
+                      activeIcon: Transform.translate(
+                        offset: const Offset(0, 20),
+                        child: Icon(
+                          navBtnProperty["active_icon"],
+                        ),
+                      ),
+                      label: (navBtnProperty["label"]),
                     );
                   }),
                 ),
               ),
-            ),
+            ),*/
           ),
         );
       },

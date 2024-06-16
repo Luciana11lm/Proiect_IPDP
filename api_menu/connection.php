@@ -1,7 +1,7 @@
 <?php
-  $serverHost = "localhost";
+  $serverHost = "db";
   $user = "root";
-  $password = "";
+  $password = "mukit";
   $database = "menu_app";
 
   $connectNow = new mysqli($serverHost, $user, $password, $database);

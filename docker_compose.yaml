@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    image: phpmyadmin/phpmyadmin
+    container_name: my_own_phpmyadmin
+    ports:
+      - "8081:80"
+    volumes:
+      - ./web:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: menu_app
+      MYSQL_USER: root
+      MYSQL_PASSWORD: mukit
+    ports:
+      - "3308:3308"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

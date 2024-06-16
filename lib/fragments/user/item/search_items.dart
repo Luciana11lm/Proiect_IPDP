@@ -20,7 +20,8 @@ class _SearchItemsState extends State<SearchItems> {
 
   Future<List<Product>> readSearchRecordFound() async {
     List<Product> productSearchList = [];
-    if (searchController.text != null) {
+    print("typedKeyWords: ${searchController.text}");
+    if (searchController.text != "") {
       try {
         var res = await http.post(
           Uri.parse(API.searchItems),
@@ -64,7 +65,7 @@ class _SearchItemsState extends State<SearchItems> {
         title: showSearchBarWidget(),
         titleSpacing: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.orange),
+          icon: const Icon(Icons.arrow_back, color: Colors.orange),
           onPressed: () {
             Get.back();
           },
@@ -87,7 +88,9 @@ class _SearchItemsState extends State<SearchItems> {
         controller: searchController,
         decoration: InputDecoration(
           prefixIcon: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {});
+            },
             icon: const Icon(
               Icons.search,
               color: Colors.orangeAccent,
@@ -97,6 +100,13 @@ class _SearchItemsState extends State<SearchItems> {
           hintStyle: const TextStyle(
             color: Colors.grey,
             fontSize: 12,
+          ),
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.close, color: Colors.orange),
+            onPressed: () {
+              searchController.clear();
+              setState(() {});
+            },
           ),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(60)),
